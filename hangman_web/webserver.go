@@ -27,10 +27,6 @@ func StartServer() {
 func GetHandler(w http.ResponseWriter, r *http.Request) {
 	tp := template.Must(template.ParseFiles("web/index.html"))
 
-	data := Test{
-		MaVariable: "Ouba ouba",
-	}
-
 	tp.Execute(w, nil)
 }
 
@@ -47,6 +43,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	buffer.Write([]byte(r.Form.Get("input")))
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func worker(wg *sync.WaitGroup, id int) {
