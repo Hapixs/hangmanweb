@@ -12,8 +12,7 @@ h1
 }
 div
 {
-    position: absolute;
+    position: flex;
     color: aqua;
     text-align: center;
-
 }
