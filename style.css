@@ -1,0 +1,19 @@
+body
+{
+    background-color: black;
+}
+h1
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: aqua;
+    font-size: 55px;
+}
+div
+{
+    position: absolute;
+    color: aqua;
+    text-align: center;
+
+}
