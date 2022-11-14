@@ -1,7 +1,7 @@
 package hangmanweb
 
 import (
-	"bufio"
+	"bytes"
 	"fmt"
 	"hangman_classic"
 	"net/http"
@@ -26,10 +26,15 @@ func StartServer() {
 
 func GetHandler(w http.ResponseWriter, r *http.Request) {
 	tp := template.Must(template.ParseFiles("web/index.html"))
+
+	data := Test{
+		MaVariable: "Ouba ouba",
+	}
+
 	tp.Execute(w, nil)
 }
 
-var tempInput = ""
+var buffer = bytes.Buffer{}
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -41,7 +46,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	os.Stdin.Write([]byte(r.Form.Get("input") + "\n"))
+	buffer.Write([]byte(r.Form.Get("input")))
 }
 
 func worker(wg *sync.WaitGroup, id int) {
@@ -50,12 +55,14 @@ func worker(wg *sync.WaitGroup, id int) {
 }
 
 var overridedExecutionWaitForInput = hangman_classic.GameExecution{Func: func(userInput *string) bool {
-	reader := bufio.NewReader(os.Stdin)
-	in, _ := reader.ReadString(byte('\n'))
-	println("readed " + in)
+	for buffer.Len() <= 0 {
+	}
+	in, _ := buffer.ReadString(byte('\n'))
 	if len(string(in)) <= 0 {
 		return true
 	}
 	*userInput = string(in)
+	os.Stdin.WriteString(in)
+	buffer.Reset()
 	return false
 }}

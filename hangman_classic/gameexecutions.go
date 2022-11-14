@@ -28,7 +28,7 @@ var executionDisplayBody = GameExecution{func(userInput *string) bool {
 
 var executionWaitForInput = GameExecution{func(userInput *string) bool {
 	reader := bufio.NewReader(os.Stdin)
-	in, _, _ := reader.ReadLine()
+	in, _ := reader.ReadBytes(byte('\n'))
 	if len(string(in)) <= 0 {
 		return true
 	}
