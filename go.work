@@ -1,0 +1,6 @@
+go 1.19
+
+use (
+	./hangman_classic
+	./hangman_web
+)
