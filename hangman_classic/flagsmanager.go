@@ -52,7 +52,7 @@ var flagExecutors = map[string](CommandFlag){
 }
 
 func flagHardModeExecutor(args []string) []string {
-	SetConfigItemValue(configGameMode, HARD)
+	SetConfigItemValue(ConfigGameMode, HARD)
 	args = append(args[:0], args[1:]...)
 	return args
 }
@@ -72,39 +72,39 @@ func flagStartWithExecutor(args []string) []string {
 }
 
 func flagNoASCII(args []string) []string {
-	SetConfigItemValue(configUseAscii, false)
+	SetConfigItemValue(ConfigUseAscii, false)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
 func flagUseASCII(args []string) []string {
-	SetConfigItemValue(configUseAscii, true)
+	SetConfigItemValue(ConfigUseAscii, true)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
 func flagAutoClear(args []string) []string {
-	SetConfigItemValue(configAutoClear, true)
+	SetConfigItemValue(ConfigAutoClear, true)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
 func flagDontAutoClear(args []string) []string {
-	SetConfigItemValue(configAutoClear, false)
+	SetConfigItemValue(ConfigAutoClear, false)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
 func flagBigHangman(args []string) []string {
-	SetConfigItemValue(configHangmanFile, "bighangman.txt")
-	SetConfigItemValue(configHangmanHeight, 20)
+	SetConfigItemValue(ConfigHangmanFile, "bighangman.txt")
+	SetConfigItemValue(ConfigHangmanHeight, 20)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
 func flagLittleHangman(args []string) []string {
-	SetConfigItemValue(configHangmanFile, "hangman.txt")
-	SetConfigItemValue(configHangmanHeight, 9)
+	SetConfigItemValue(ConfigHangmanFile, "hangman.txt")
+	SetConfigItemValue(ConfigHangmanHeight, 9)
 	args = append(args[:0], args[1:]...)
 	return args
 }
@@ -124,9 +124,9 @@ func flagUseASCIIWithBool(args []string) []string {
 	}
 	switch args[1] {
 	case "false", "f", "0":
-		SetConfigItemValue(configUseAscii, true)
+		SetConfigItemValue(ConfigUseAscii, true)
 	case "true", "t", "1":
-		SetConfigItemValue(configUseAscii, false)
+		SetConfigItemValue(ConfigUseAscii, false)
 	}
 	args = append(args[:0], args[2:]...)
 	return args
@@ -139,16 +139,16 @@ func flagSetGameMode(args []string) []string {
 	}
 	switch args[1] {
 	case "1", "hard", "h":
-		SetConfigItemValue(configGameMode, HARD)
+		SetConfigItemValue(ConfigGameMode, HARD)
 	case "0", "normal", "n":
-		SetConfigItemValue(configGameMode, NORMAL)
+		SetConfigItemValue(ConfigGameMode, NORMAL)
 	}
 	args = append(args[:0], args[2:]...)
 	return args
 }
 
 func flagAutoSave(args []string) []string {
-	SetConfigItemValue(configAutoSave, true)
+	SetConfigItemValue(ConfigAutoSave, true)
 	args = append(args[:0], args[1:]...)
 	return args
 }
@@ -157,25 +157,25 @@ func flagSaveFile(args []string) []string {
 		args = append(args[:0], args[1:]...)
 		return args
 	}
-	SetConfigItemValue(configSaveFile, args[1])
+	SetConfigItemValue(ConfigSaveFile, args[1])
 	args = append(args[:0], args[2:]...)
 	return args
 }
 
 func flagLow(args []string) []string {
-	SetConfigItemValue(configAutoClear, false)
-	SetConfigItemValue(configHangmanFile, "hangman.txt")
-	SetConfigItemValue(configHangmanHeight, 8)
-	SetConfigItemValue(configUseAscii, false)
+	SetConfigItemValue(ConfigAutoClear, false)
+	SetConfigItemValue(ConfigHangmanFile, "hangman.txt")
+	SetConfigItemValue(ConfigHangmanHeight, 8)
+	SetConfigItemValue(ConfigUseAscii, false)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
 func flagHigh(args []string) []string {
-	SetConfigItemValue(configAutoClear, true)
-	SetConfigItemValue(configHangmanFile, "bighangman.txt")
-	SetConfigItemValue(configHangmanHeight, 20)
-	SetConfigItemValue(configUseAscii, true)
+	SetConfigItemValue(ConfigAutoClear, true)
+	SetConfigItemValue(ConfigHangmanFile, "bighangman.txt")
+	SetConfigItemValue(ConfigHangmanHeight, 20)
+	SetConfigItemValue(ConfigUseAscii, true)
 	args = append(args[:0], args[1:]...)
 	return args
 }
@@ -185,14 +185,14 @@ func flagASCIIFile(args []string) []string {
 		println("[Warn] Please specify a file after -asciifile (using standard.txt instead)!")
 		args = append(args[:0], args[1:]...)
 	} else {
-		SetConfigItemValue(configASCIIFile, args[1])
+		SetConfigItemValue(ConfigASCIIFile, args[1])
 		args = append(args[:0], args[2:]...)
 	}
 	return args
 }
 
 func flagUseBetterTerm(args []string) []string {
-	SetConfigItemValue(configBetterTerminal, true)
+	SetConfigItemValue(ConfigBetterTerminal, true)
 	args = append(args[:0], args[1:]...)
 	return args
 }
@@ -216,7 +216,7 @@ func GameProcessArguments(args []string) {
 				println("Can't find argument " + arg)
 			}
 		} else {
-			SetConfigItemValue(configWordsList, arg)
+			SetConfigItemValue(ConfigWordsList, arg)
 			args = append(args[:0], args[1:]...)
 		}
 	}

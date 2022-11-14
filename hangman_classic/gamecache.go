@@ -14,7 +14,7 @@ var FromSave = false
 
 func InitGameCache() {
 
-	_, _, fileName := GetConfigItem(configWordsList)
+	_, _, fileName := GetConfigItem(ConfigWordsList)
 	if len(fileName) <= 0 {
 		println("Please specify a word file")
 		os.Exit(1)
@@ -26,7 +26,7 @@ func InitGameCache() {
 	}
 	words = strings.Split(string(content), "\n")
 
-	_, _, hangmanFileName := GetConfigItem(configHangmanFile)
+	_, _, hangmanFileName := GetConfigItem(ConfigHangmanFile)
 	content, err = os.ReadFile(hangmanFileName)
 	if err != nil {
 		println("Error! Unable to load hangman list '" + fileName + "'")
@@ -34,15 +34,15 @@ func InitGameCache() {
 	}
 	hangmanStatContentSplited := strings.Split(string(content), "\n")
 
-	maxTires, _, _ := GetConfigItem(configMaxTries)
+	maxTires, _, _ := GetConfigItem(ConfigMaxTries)
 	for i := 0; i < maxTires; i++ {
-		hangmanHeight, _, _ := GetConfigItem(configHangmanHeight)
+		hangmanHeight, _, _ := GetConfigItem(ConfigHangmanHeight)
 		currentMin := i * hangmanHeight
 		currentMax := currentMin + hangmanHeight
 		hangmanByStatus[i+1] = hangmanStatContentSplited[currentMin:currentMax]
 	}
 
-	_, _, asciiFileName := GetConfigItem(configASCIIFile)
+	_, _, asciiFileName := GetConfigItem(ConfigASCIIFile)
 
 	content, err = os.ReadFile(asciiFileName)
 	if err != nil {
@@ -52,7 +52,7 @@ func InitGameCache() {
 
 	asciiCharacterContentSplited := strings.Split(string(content), "\n")
 	for i := 0; i < 127-32; i++ {
-		asciiHeight, _, _ := GetConfigItem(configASCIIHeight)
+		asciiHeight, _, _ := GetConfigItem(ConfigASCIIHeight)
 		currentMin := i * asciiHeight
 		currentMax := currentMin + asciiHeight
 		asciiByChar[rune(i+32)] = asciiCharacterContentSplited[currentMin:currentMax]

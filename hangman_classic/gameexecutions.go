@@ -14,7 +14,7 @@ var executionCheckForRemainingTries = GameExecution{func(userInput *string) bool
 }}
 
 var executionLookForAutoSave = GameExecution{func(userInput *string) bool {
-	_, autoSaveStatus, _ := GetConfigItem(configAutoSave)
+	_, autoSaveStatus, _ := GetConfigItem(ConfigAutoSave)
 	if autoSaveStatus {
 		SaveGame()
 	}

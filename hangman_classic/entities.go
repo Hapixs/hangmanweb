@@ -53,16 +53,31 @@ const (
 type ConfigKey string
 
 const (
-	configWordsList      ConfigKey = "wordsListFileName"
-	configHangmanFile    ConfigKey = "hangmanFileName"
-	configASCIIFile      ConfigKey = "asciiRuneFileName"
-	configGameMode       ConfigKey = "gameMode"
-	configMaxTries       ConfigKey = "maxTries"
-	configUseAscii       ConfigKey = "gameDesigneUseAscii"
-	configAutoClear      ConfigKey = "autoClear"
-	configHangmanHeight  ConfigKey = "hangmanDisplayHeight"
-	configASCIIHeight    ConfigKey = "asciiRuneDisplayHeight"
-	configAutoSave       ConfigKey = "autoSave"
-	configSaveFile       ConfigKey = "saveFileName"
-	configBetterTerminal ConfigKey = "betterTerminal"
+	ConfigWordsList      ConfigKey = "wordsListFileName"
+	ConfigHangmanFile    ConfigKey = "hangmanFileName"
+	ConfigASCIIFile      ConfigKey = "asciiRuneFileName"
+	ConfigGameMode       ConfigKey = "gameMode"
+	ConfigMaxTries       ConfigKey = "maxTries"
+	ConfigUseAscii       ConfigKey = "gameDesigneUseAscii"
+	ConfigAutoClear      ConfigKey = "autoClear"
+	ConfigHangmanHeight  ConfigKey = "hangmanDisplayHeight"
+	ConfigASCIIHeight    ConfigKey = "asciiRuneDisplayHeight"
+	ConfigAutoSave       ConfigKey = "autoSave"
+	ConfigSaveFile       ConfigKey = "saveFileName"
+	ConfigBetterTerminal ConfigKey = "betterTerminal"
+)
+
+type DefaultExecution string
+
+const (
+	defaultExecutionCheckForRemainingTries  DefaultExecution = "checkforremainingtries"
+	defaultExecutionLookForAutoSave         DefaultExecution = "lookforautosave"
+	defaultExecutionDisplayBody             DefaultExecution = "displaybody"
+	defaultExecutionWaitForInput            DefaultExecution = "waitforinput"
+	defaultExecutionCheckForWord            DefaultExecution = "checkforword"
+	defaultExecutionCheckForVowel           DefaultExecution = "checkforvowel"
+	defaultExecutionLetterIsUsed            DefaultExecution = "letterisused"
+	defaultExecutionCheckForLetterOccurence DefaultExecution = "checkforletteroccurence"
+	defaultExecutionCheckForWordDiscover    DefaultExecution = "checkforworddiscover"
+	defaultExecutionAddToUsedLetter         DefaultExecution = "addtousedletter"
 )

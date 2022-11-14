@@ -51,7 +51,7 @@ func SetGameToFind(tofind string) string {
 }
 
 func GetGameToFind() string {
-	_, b, _ := GetConfigItem(configUseAscii)
+	_, b, _ := GetConfigItem(ConfigUseAscii)
 	if b {
 		return ConvertToUnicode(game.tofind)
 	}
@@ -72,7 +72,7 @@ func GetGameSave() GameSave {
 }
 
 func SaveGame() {
-	_, _, fileName := GetConfigItem(configSaveFile)
+	_, _, fileName := GetConfigItem(ConfigSaveFile)
 	saveEnc, err := json.Marshal(GetGameSave())
 	if err != nil {
 		println("Error: JSON error")

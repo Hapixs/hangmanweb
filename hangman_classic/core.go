@@ -6,12 +6,14 @@ import (
 	"strconv"
 )
 
-var maxTries, _, _ = GetConfigItem(configMaxTries)
-var gameMode, _, _ = GetConfigItem(configGameMode)
+var maxTries, _, _ = GetConfigItem(ConfigMaxTries)
+var gameMode, _, _ = GetConfigItem(ConfigGameMode)
 
-var executions = []GameExecution{}
+var Executions = []GameExecution{}
 
-func StartGame() {
+var isInit = false
+
+func InitGame() {
 	args := os.Args[1:]
 
 	GameProcessArguments(args)
@@ -20,27 +22,30 @@ func StartGame() {
 	InitGameCache()
 	InitUI()
 
-	executions = append(executions, executionLookForAutoSave)
-	executions = append(executions, executionDisplayBody)
-	executions = append(executions, executionCheckForRemainingTries)
-	executions = append(executions, executionWaitForInput)
-	executions = append(executions, executionCheckForWord)
-	executions = append(executions, executionCheckForVowel)
-	executions = append(executions, executionCheckLetterIsUsed)
-	executions = append(executions, executionCheckForLetterOccurence)
-	executions = append(executions, executionCheckForWordDiscover)
-	executions = append(executions, executionAddToUsedLetter)
+	Executions = append(Executions, executionLookForAutoSave)
+	Executions = append(Executions, executionDisplayBody)
+	Executions = append(Executions, executionCheckForRemainingTries)
+	Executions = append(Executions, executionWaitForInput)
+	Executions = append(Executions, executionCheckForWord)
+	Executions = append(Executions, executionCheckForVowel)
+	Executions = append(Executions, executionCheckLetterIsUsed)
+	Executions = append(Executions, executionCheckForLetterOccurence)
+	Executions = append(Executions, executionCheckForWordDiscover)
+	Executions = append(Executions, executionAddToUsedLetter)
 
-	maxTries, _, _ = GetConfigItem(configMaxTries)
-	gameMode, _, _ = GetConfigItem(configGameMode)
+	maxTries, _, _ = GetConfigItem(ConfigMaxTries)
+	gameMode, _, _ = GetConfigItem(ConfigGameMode)
 	addInformationHeadMessage("Good Luck, you have " + strconv.Itoa(maxTries-game.Tries) + "  attempts.")
-	ContinueGame()
+	isInit = true
 }
 
-func ContinueGame() {
+func StartGame() {
+	if !isInit {
+		InitGame()
+	}
 	for {
 		userInput := ""
-		for _, execution := range executions {
+		for _, execution := range Executions {
 			if execution.Func(&userInput) {
 				break
 			}

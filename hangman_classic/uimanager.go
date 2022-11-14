@@ -20,7 +20,7 @@ var termApplication = tview.NewApplication()
 var termRoot = tview.NewFlex()
 
 func InitUI() {
-	_, useBetterTerminal, _ = GetConfigItem(configBetterTerminal)
+	_, useBetterTerminal, _ = GetConfigItem(ConfigBetterTerminal)
 	if useBetterTerminal {
 		err := termApplication.SetRoot(termRoot, true).Run()
 		if err != nil {
@@ -44,12 +44,12 @@ func DisplayBody() {
 			AddItem(tview.NewTextView().SetText("HELP"), 0, 1, false), 0, 1, false)
 		termApplication.SetRoot(termRoot, true)
 	} else {
-		_, clearscreen, _ := GetConfigItem(configAutoClear)
+		_, clearscreen, _ := GetConfigItem(ConfigAutoClear)
 		if clearscreen {
 			ClearScreen()
 		}
 		println(informationHeadMessages[len(informationHeadMessages)-1])
-		_, useAscii, _ := GetConfigItem(configUseAscii)
+		_, useAscii, _ := GetConfigItem(ConfigUseAscii)
 		if useAscii {
 			for _, line := range BuildASCIIWord(GetGameWord()) {
 				println(line)

@@ -3,24 +3,24 @@ package hangman_classic
 import "errors"
 
 var configItemsInt = map[ConfigKey]ConfigItemInt{
-	configMaxTries:      {10, 10},
-	configGameMode:      {NORMAL, NORMAL},
-	configHangmanHeight: {8, 8},
-	configASCIIHeight:   {9, 9},
+	ConfigMaxTries:      {10, 10},
+	ConfigGameMode:      {NORMAL, NORMAL},
+	ConfigHangmanHeight: {8, 8},
+	ConfigASCIIHeight:   {9, 9},
 }
 
 var configItemsBool = map[ConfigKey]ConfigItemBoolean{
-	configUseAscii:       {true, true},
-	configAutoClear:      {false, false},
-	configAutoSave:       {false, false},
-	configBetterTerminal: {false, false},
+	ConfigUseAscii:       {true, true},
+	ConfigAutoClear:      {false, false},
+	ConfigAutoSave:       {false, false},
+	ConfigBetterTerminal: {false, false},
 }
 
 var configItemsString = map[ConfigKey]ConfigItemString{
-	configWordsList:   {"", ""},
-	configHangmanFile: {"hangman.txt", "hangman.txt"},
-	configASCIIFile:   {"standard.txt", "standard.txt"},
-	configSaveFile:    {"save.txt", "save.txt"},
+	ConfigWordsList:   {"", ""},
+	ConfigHangmanFile: {"hangman.txt", "hangman.txt"},
+	ConfigASCIIFile:   {"standard.txt", "standard.txt"},
+	ConfigSaveFile:    {"save.txt", "save.txt"},
 }
 
 func GetConfigItem(key ConfigKey) (int, bool, string) {
