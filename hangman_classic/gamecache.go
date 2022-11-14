@@ -1,7 +1,6 @@
 package hangman_classic
 
 import (
-	"crypto/sha256"
 	"os"
 	"strings"
 )
@@ -87,10 +86,4 @@ func GetCacheWordList() []string {
 
 func GetASCIIArtFromRune(r rune) []string {
 	return asciiByChar[r]
-}
-
-func GetEncodedStringInSha256(str string) []byte {
-	h := sha256.New()
-	h.Write([]byte(str))
-	return h.Sum([]byte{})
 }

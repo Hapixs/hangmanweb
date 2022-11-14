@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-var executionCheckForRemainingTries = GameExecution{func(userInput *string) bool {
+var executionCheckForRemainingTries = GameExecution{string(DefaultExecutionCheckForRemainingTries), func(userInput *string) bool {
 	if GetGameTries() >= maxTries {
 		DisplayLooseLogo()
 		StopGame()
@@ -13,7 +13,7 @@ var executionCheckForRemainingTries = GameExecution{func(userInput *string) bool
 	return false
 }}
 
-var executionLookForAutoSave = GameExecution{func(userInput *string) bool {
+var executionLookForAutoSave = GameExecution{string(DefaultExecutionLookForAutoSave), func(userInput *string) bool {
 	_, autoSaveStatus, _ := GetConfigItem(ConfigAutoSave)
 	if autoSaveStatus {
 		SaveGame()
@@ -21,12 +21,12 @@ var executionLookForAutoSave = GameExecution{func(userInput *string) bool {
 	return false
 }}
 
-var executionDisplayBody = GameExecution{func(userInput *string) bool {
+var executionDisplayBody = GameExecution{string(DefaultExecutionDisplayBody), func(userInput *string) bool {
 	DisplayBody()
 	return false
 }}
 
-var executionWaitForInput = GameExecution{func(userInput *string) bool {
+var executionWaitForInput = GameExecution{string(DefaultExecutionWaitForInput), func(userInput *string) bool {
 	reader := bufio.NewReader(os.Stdin)
 	in, _ := reader.ReadBytes(byte('\n'))
 	if len(string(in)) <= 0 {
@@ -36,7 +36,7 @@ var executionWaitForInput = GameExecution{func(userInput *string) bool {
 	return false
 }}
 
-var executionCheckForWord = GameExecution{func(userInput *string) bool {
+var executionCheckForWord = GameExecution{string(DefaultExecutionCheckForWord), func(userInput *string) bool {
 	if len(*userInput) > 1 {
 		if string(*userInput) == "STOP" {
 			SaveGame()
@@ -54,7 +54,7 @@ var executionCheckForWord = GameExecution{func(userInput *string) bool {
 	return false
 }}
 
-var executionCheckForVowel = GameExecution{func(userInput *string) bool {
+var executionCheckForVowel = GameExecution{string(DefaultExecutionCheckForVowel), func(userInput *string) bool {
 	rn := []rune(*userInput)[0]
 	if gameMode == HARD && isVowel(rn) && VowelCount(GetGameUsed()) >= 3 {
 		addInformationHeadMessage("You can't use vowel anymore !")
@@ -65,7 +65,7 @@ var executionCheckForVowel = GameExecution{func(userInput *string) bool {
 	return false
 }}
 
-var executionCheckLetterIsUsed = GameExecution{func(userInput *string) bool {
+var executionCheckLetterIsUsed = GameExecution{string(DefaultExecutionLetterIsUsed), func(userInput *string) bool {
 	rn := []rune(*userInput)[0]
 	if HasOccurenceLetter(GetGameUsed(), rn) && gameMode != HARD {
 		addInformationHeadMessage("You already use this letter")
@@ -80,7 +80,7 @@ var executionCheckLetterIsUsed = GameExecution{func(userInput *string) bool {
 	return false
 }}
 
-var executionCheckForLetterOccurence = GameExecution{func(userInput *string) bool {
+var executionCheckForLetterOccurence = GameExecution{string(DefaultExecutionCheckForLetterOccurence), func(userInput *string) bool {
 	rn := []rune(*userInput)[0]
 	if !HasOccurenceLetter(GetGameToFind(), rune(rn)) {
 		AddGameTry()
@@ -91,7 +91,7 @@ var executionCheckForLetterOccurence = GameExecution{func(userInput *string) boo
 	return false
 }}
 
-var executionCheckForWordDiscover = GameExecution{func(userInput *string) bool {
+var executionCheckForWordDiscover = GameExecution{string(DefaultExecutionCheckForWordDiscover), func(userInput *string) bool {
 	if !HasOccurenceLetter(GetGameWord(), '_') {
 		WinGame()
 		return true
@@ -99,7 +99,7 @@ var executionCheckForWordDiscover = GameExecution{func(userInput *string) bool {
 	return false
 }}
 
-var executionAddToUsedLetter = GameExecution{func(userInput *string) bool {
+var executionAddToUsedLetter = GameExecution{string(DefaultExecutionAddToUsedLetter), func(userInput *string) bool {
 	rn := []rune(*userInput)[0]
 	AddGameUsed(rn)
 	return false

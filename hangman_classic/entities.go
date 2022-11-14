@@ -42,6 +42,7 @@ type CommandFlag struct {
 }
 
 type GameExecution struct {
+	name string
 	Func func(userInput *string) bool
 }
 
@@ -51,6 +52,7 @@ const (
 )
 
 type ConfigKey string
+type DefaultExecution string
 
 const (
 	ConfigWordsList      ConfigKey = "wordsListFileName"
@@ -65,19 +67,15 @@ const (
 	ConfigAutoSave       ConfigKey = "autoSave"
 	ConfigSaveFile       ConfigKey = "saveFileName"
 	ConfigBetterTerminal ConfigKey = "betterTerminal"
-)
 
-type DefaultExecution string
-
-const (
-	defaultExecutionCheckForRemainingTries  DefaultExecution = "checkforremainingtries"
-	defaultExecutionLookForAutoSave         DefaultExecution = "lookforautosave"
-	defaultExecutionDisplayBody             DefaultExecution = "displaybody"
-	defaultExecutionWaitForInput            DefaultExecution = "waitforinput"
-	defaultExecutionCheckForWord            DefaultExecution = "checkforword"
-	defaultExecutionCheckForVowel           DefaultExecution = "checkforvowel"
-	defaultExecutionLetterIsUsed            DefaultExecution = "letterisused"
-	defaultExecutionCheckForLetterOccurence DefaultExecution = "checkforletteroccurence"
-	defaultExecutionCheckForWordDiscover    DefaultExecution = "checkforworddiscover"
-	defaultExecutionAddToUsedLetter         DefaultExecution = "addtousedletter"
+	DefaultExecutionCheckForRemainingTries  DefaultExecution = "checkforremainingtries"
+	DefaultExecutionLookForAutoSave         DefaultExecution = "lookforautosave"
+	DefaultExecutionDisplayBody             DefaultExecution = "displaybody"
+	DefaultExecutionWaitForInput            DefaultExecution = "waitforinput"
+	DefaultExecutionCheckForWord            DefaultExecution = "checkforword"
+	DefaultExecutionCheckForVowel           DefaultExecution = "checkforvowel"
+	DefaultExecutionLetterIsUsed            DefaultExecution = "letterisused"
+	DefaultExecutionCheckForLetterOccurence DefaultExecution = "checkforletteroccurence"
+	DefaultExecutionCheckForWordDiscover    DefaultExecution = "checkforworddiscover"
+	DefaultExecutionAddToUsedLetter         DefaultExecution = "addtousedletter"
 )

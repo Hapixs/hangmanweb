@@ -2,7 +2,6 @@ package hangmanweb
 
 import (
 	"bytes"
-	"fmt"
 	"hangman_classic"
 	"net/http"
 	"os"
@@ -20,7 +19,7 @@ func StartServer() {
 	go worker(&wg, 0)
 	hangman_classic.SetConfigItemValue(hangman_classic.ConfigWordsList, "words.txt")
 	hangman_classic.InitGame()
-	hangman_classic.Executions[3] = overridedExecutionWaitForInput
+	hangman_classic.ReplaceExecution(overridedExecutionWaitForInput, string(hangman_classic.DefaultExecutionWaitForInput))
 	hangman_classic.StartGame()
 }
 
@@ -34,8 +33,6 @@ var buffer = bytes.Buffer{}
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
-	case "GET":
-		fmt.Println("GET")
 	case "POST":
 		if err := r.ParseForm(); err != nil {
 			println("ParseForm() err: %v", err)
