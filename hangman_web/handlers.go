@@ -37,3 +37,8 @@ func GetHandler(w http.ResponseWriter, r *http.Request) {
 
 	tp.Execute(w, data)
 }
+
+func ResetHandler(w http.ResponseWriter, r *http.Request) {
+	RestartHangman()
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}

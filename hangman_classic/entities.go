@@ -42,7 +42,7 @@ type CommandFlag struct {
 }
 
 type GameExecution struct {
-	name string
+	Name string
 	Func func(userInput *string) bool
 }
 

@@ -13,6 +13,7 @@ var FromSave = false
 
 func InitGameCache() {
 
+	ResetTempData()
 	_, _, fileName := GetConfigItem(ConfigWordsList)
 	if len(fileName) <= 0 {
 		println("Please specify a word file")

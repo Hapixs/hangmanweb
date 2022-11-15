@@ -23,7 +23,7 @@ func AddGameExecution(exec GameExecution) {
 
 func ReplaceExecution(exec GameExecution, targetName string) {
 	for i, e := range Executions {
-		if e.name == targetName {
+		if e.Name == targetName {
 			Executions[i] = exec
 			return
 		}
@@ -33,7 +33,7 @@ func ReplaceExecution(exec GameExecution, targetName string) {
 
 func AddAfterExecution(exec GameExecution, targetName string) {
 	for i, e := range Executions {
-		if e.name == targetName {
+		if e.Name == targetName {
 			t := Executions[i:]
 			Executions = append(append(Executions[:i], exec), t...)
 			return
@@ -44,7 +44,7 @@ func AddAfterExecution(exec GameExecution, targetName string) {
 
 func AddBeforeExecution(exec GameExecution, targetName string) {
 	for i, e := range Executions {
-		if e.name == targetName {
+		if e.Name == targetName {
 			t := Executions[i-1:]
 			Executions = append(append(Executions[:i-1], exec), t...)
 			return

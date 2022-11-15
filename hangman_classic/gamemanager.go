@@ -110,3 +110,7 @@ func LoadSave(fileName string) error {
 	FromSave = true
 	return nil
 }
+
+func ResetTempData() {
+	game.Used = ""
+}
