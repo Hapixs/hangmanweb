@@ -1,9 +1,17 @@
 package hangmanweb
 
 import (
+	"hangman_classic"
 	"net/http"
 	"text/template"
 )
+
+type HtmlData struct {
+	GetGameTries  int
+	GetGameUsed   string
+	GetGameWord   string
+	GetGameToFind string
+}
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -18,7 +26,14 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetHandler(w http.ResponseWriter, r *http.Request) {
-	tp := template.Must(template.ParseFiles("../hangman_web/web/index.html"))
+	tp := template.Must(template.ParseFiles("web/index.html"))
 
-	tp.Execute(w, nil)
+	data := HtmlData{
+		GetGameTries:  hangman_classic.GetGameTries(),
+		GetGameUsed:   hangman_classic.GetGameUsed(),
+		GetGameWord:   hangman_classic.GetGameWord(),
+		GetGameToFind: hangman_classic.GetGameToFind(),
+	}
+
+	tp.Execute(w, data)
 }

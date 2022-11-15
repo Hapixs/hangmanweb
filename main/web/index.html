@@ -4,19 +4,16 @@
 
 <head>
 <meta charset="utf-8">
-<title>un petit titre</title>
+<title>Hangman - Team Absenteisme</title>
 <link rel="stylesheet" href="web/style.css">
 </head>
 
 <body>
 <h1>The Hangman</h1>
-<div>  +---+  
-    |   |  
-    O   |  
-   /|\  |  
-   / \  |  
-        |  
-  =========</div>
+<h1>{{ .GetGameWord }}</h1>
+<p> Number of tries /10: {{ .GetGameTries }}</p>
+<p>Letters already used: {{ .GetGameUsed }}</p>
+<!-- once game is finished(if the number of tries is 0): {{ .GetGameToFind }} -->
 
 
   <form action="/hangman" method="post">
