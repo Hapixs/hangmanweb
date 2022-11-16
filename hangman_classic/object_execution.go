@@ -74,6 +74,15 @@ func (g *HangmanGame) AddBeforeExecution(exec GameExecution, targetName string) 
 	println("Unable to find " + targetName + " execution in the list.")
 }
 
+func (g *HangmanGame) RemoveExecution(targetName DefaultExecution) {
+	for i, e := range g.executions {
+		if e.Name == string(targetName) {
+			g.executions = append(g.executions[:i], g.executions[i+1:]...)
+			return
+		}
+	}
+}
+
 var executionCheckForRemainingTries = GameExecution{string(DefaultExecutionCheckForRemainingTries), func(userInput *string, game *HangmanGame) bool {
 	maxTries, _, _ := game.Config.GetConfigItem(ConfigMaxTries)
 	if game.GetGameTries() >= maxTries {
