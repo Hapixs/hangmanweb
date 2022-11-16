@@ -16,6 +16,7 @@ type HangmanGame struct {
 	Used          string     // This string contains all used letter in this game
 	Config        GameConfig // The actual game config
 	Gamestatus    int        // The actual game status
+	PublicId      string
 
 	// PRIVATE
 	tofind     string
@@ -50,7 +51,12 @@ func (game *HangmanGame) InitGame() {
 	maxTries, _, _ := game.Config.GetConfigItem(ConfigMaxTries)
 	AddInformationHeadMessage("Good Luck, you have " + strconv.Itoa(maxTries-game.Tries) + "  attempts.")
 	game.Config.SetConfigItemValue(ConfigIsInit, true)
+	game.GeneratePublicId()
 	game.Gamestatus = int(PLAYING)
+}
+
+func (game *HangmanGame) GeneratePublicId() {
+	game.PublicId = strconv.Itoa(rand.Intn(150000000))
 }
 
 func (game *HangmanGame) StartGame() {
