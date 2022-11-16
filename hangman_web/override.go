@@ -2,7 +2,6 @@ package hangmanweb
 
 import (
 	"hangman_classic"
-	"os"
 )
 
 var overridedExecutionWaitForInput = hangman_classic.GameExecution{Name: string(hangman_classic.DefaultExecutionWaitForInput), Func: func(userInput *string, game *hangman_classic.HangmanGame) bool {
@@ -17,7 +16,6 @@ var overridedExecutionWaitForInput = hangman_classic.GameExecution{Name: string(
 		return true
 	}
 	*userInput = string(in)
-	os.Stdin.WriteString(in + "\n")
 	Game.Input.Reset()
 	return false
 }}
