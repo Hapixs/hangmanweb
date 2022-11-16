@@ -51,65 +51,66 @@ var flagExecutors = map[string](CommandFlag){
 	"-usebetterterm": CommandFlag{flagUseBetterTerm, "", "", false, "-usebetterterm"},
 }
 
-func flagHardModeExecutor(args []string) []string {
-	SetConfigItemValue(ConfigGameMode, HARD)
+func flagHardModeExecutor(game *HangmanGame, args []string) []string {
+	game.Config.SetConfigItemValue(ConfigGameMode, HARD)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
-func flagStartWithExecutor(args []string) []string {
+func flagStartWithExecutor(game *HangmanGame, args []string) []string {
 	if len(args) <= 1 {
 		println("[Warn] Please specify a file after --startWith !")
 	} else {
-		err := LoadSave(args[1])
+		games, err := game.LoadSave(args[1])
 		if err != nil {
 			println("[Warn] Save file not found !")
 		}
 		FromSave = true
+		game = &games
 		args = append(args[:0], args[2:]...)
 	}
 	return args
 }
 
-func flagNoASCII(args []string) []string {
-	SetConfigItemValue(ConfigUseAscii, false)
+func flagNoASCII(game *HangmanGame, args []string) []string {
+	game.Config.SetConfigItemValue(ConfigUseAscii, false)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
-func flagUseASCII(args []string) []string {
-	SetConfigItemValue(ConfigUseAscii, true)
+func flagUseASCII(game *HangmanGame, args []string) []string {
+	game.Config.SetConfigItemValue(ConfigUseAscii, true)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
-func flagAutoClear(args []string) []string {
-	SetConfigItemValue(ConfigAutoClear, true)
+func flagAutoClear(game *HangmanGame, args []string) []string {
+	game.Config.SetConfigItemValue(ConfigAutoClear, true)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
-func flagDontAutoClear(args []string) []string {
-	SetConfigItemValue(ConfigAutoClear, false)
+func flagDontAutoClear(game *HangmanGame, args []string) []string {
+	game.Config.SetConfigItemValue(ConfigAutoClear, false)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
-func flagBigHangman(args []string) []string {
-	SetConfigItemValue(ConfigHangmanFile, "bighangman.txt")
-	SetConfigItemValue(ConfigHangmanHeight, 20)
+func flagBigHangman(game *HangmanGame, args []string) []string {
+	game.Config.SetConfigItemValue(ConfigHangmanFile, "bighangman.txt")
+	game.Config.SetConfigItemValue(ConfigHangmanHeight, 20)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
-func flagLittleHangman(args []string) []string {
-	SetConfigItemValue(ConfigHangmanFile, "hangman.txt")
-	SetConfigItemValue(ConfigHangmanHeight, 9)
+func flagLittleHangman(game *HangmanGame, args []string) []string {
+	game.Config.SetConfigItemValue(ConfigHangmanFile, "hangman.txt")
+	game.Config.SetConfigItemValue(ConfigHangmanHeight, 9)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
-func flagShowHelpMessage(args []string) []string {
+func flagShowHelpMessage(game *HangmanGame, args []string) []string {
 	for _, l := range BuildFlagHelpMenu() {
 		print(l)
 	}
@@ -117,92 +118,92 @@ func flagShowHelpMessage(args []string) []string {
 	return args
 }
 
-func flagUseASCIIWithBool(args []string) []string {
+func flagUseASCIIWithBool(game *HangmanGame, args []string) []string {
 	if len(args) < 1 {
 		args = append(args[:0], args[1:]...)
 		return args
 	}
 	switch args[1] {
 	case "false", "f", "0":
-		SetConfigItemValue(ConfigUseAscii, true)
+		game.Config.SetConfigItemValue(ConfigUseAscii, true)
 	case "true", "t", "1":
-		SetConfigItemValue(ConfigUseAscii, false)
+		game.Config.SetConfigItemValue(ConfigUseAscii, false)
 	}
 	args = append(args[:0], args[2:]...)
 	return args
 }
 
-func flagSetGameMode(args []string) []string {
+func flagSetGameMode(game *HangmanGame, args []string) []string {
 	if len(args) < 1 {
 		args = append(args[:0], args[1:]...)
 		return args
 	}
 	switch args[1] {
 	case "1", "hard", "h":
-		SetConfigItemValue(ConfigGameMode, HARD)
+		game.Config.SetConfigItemValue(ConfigGameMode, HARD)
 	case "0", "normal", "n":
-		SetConfigItemValue(ConfigGameMode, NORMAL)
+		game.Config.SetConfigItemValue(ConfigGameMode, NORMAL)
 	}
 	args = append(args[:0], args[2:]...)
 	return args
 }
 
-func flagAutoSave(args []string) []string {
-	SetConfigItemValue(ConfigAutoSave, true)
+func flagAutoSave(game *HangmanGame, args []string) []string {
+	game.Config.SetConfigItemValue(ConfigAutoSave, true)
 	args = append(args[:0], args[1:]...)
 	return args
 }
-func flagSaveFile(args []string) []string {
+func flagSaveFile(game *HangmanGame, args []string) []string {
 	if len(args) < 1 {
 		args = append(args[:0], args[1:]...)
 		return args
 	}
-	SetConfigItemValue(ConfigSaveFile, args[1])
+	game.Config.SetConfigItemValue(ConfigSaveFile, args[1])
 	args = append(args[:0], args[2:]...)
 	return args
 }
 
-func flagLow(args []string) []string {
-	SetConfigItemValue(ConfigAutoClear, false)
-	SetConfigItemValue(ConfigHangmanFile, "hangman.txt")
-	SetConfigItemValue(ConfigHangmanHeight, 8)
-	SetConfigItemValue(ConfigUseAscii, false)
+func flagLow(game *HangmanGame, args []string) []string {
+	game.Config.SetConfigItemValue(ConfigAutoClear, false)
+	game.Config.SetConfigItemValue(ConfigHangmanFile, "hangman.txt")
+	game.Config.SetConfigItemValue(ConfigHangmanHeight, 8)
+	game.Config.SetConfigItemValue(ConfigUseAscii, false)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
-func flagHigh(args []string) []string {
-	SetConfigItemValue(ConfigAutoClear, true)
-	SetConfigItemValue(ConfigHangmanFile, "bighangman.txt")
-	SetConfigItemValue(ConfigHangmanHeight, 20)
-	SetConfigItemValue(ConfigUseAscii, true)
+func flagHigh(game *HangmanGame, args []string) []string {
+	game.Config.SetConfigItemValue(ConfigAutoClear, true)
+	game.Config.SetConfigItemValue(ConfigHangmanFile, "bighangman.txt")
+	game.Config.SetConfigItemValue(ConfigHangmanHeight, 20)
+	game.Config.SetConfigItemValue(ConfigUseAscii, true)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
-func flagASCIIFile(args []string) []string {
+func flagASCIIFile(game *HangmanGame, args []string) []string {
 	if len(args) <= 1 {
 		println("[Warn] Please specify a file after -asciifile (using standard.txt instead)!")
 		args = append(args[:0], args[1:]...)
 	} else {
-		SetConfigItemValue(ConfigASCIIFile, args[1])
+		game.Config.SetConfigItemValue(ConfigASCIIFile, args[1])
 		args = append(args[:0], args[2:]...)
 	}
 	return args
 }
 
-func flagUseBetterTerm(args []string) []string {
-	SetConfigItemValue(ConfigBetterTerminal, true)
+func flagUseBetterTerm(game *HangmanGame, args []string) []string {
+	game.Config.SetConfigItemValue(ConfigBetterTerminal, true)
 	args = append(args[:0], args[1:]...)
 	return args
 }
 
-func GameProcessArguments(args []string) {
+func (game *HangmanGame) GameProcessArguments(args []string) {
 	for len(args) > 0 {
 		arg := args[0]
 		if arg[0] == "-"[0] {
 			if arg == "--help" || arg == "-h" {
-				flagShowHelpMessage(args)
+				flagShowHelpMessage(game, args)
 				return
 			}
 			if val, ok := flagExecutors[arg]; ok {
@@ -210,13 +211,13 @@ func GameProcessArguments(args []string) {
 				if cmdFlag.IsAliase {
 					cmdFlag = flagExecutors[cmdFlag.AliaseOf]
 				}
-				args = cmdFlag.FlagExecutor(args)
+				args = cmdFlag.FlagExecutor(game, args)
 			} else {
 				args = append(args[:0], args[1:]...)
 				println("Can't find argument " + arg)
 			}
 		} else {
-			SetConfigItemValue(ConfigWordsList, arg)
+			game.Config.SetConfigItemValue(ConfigWordsList, arg)
 			args = append(args[:0], args[1:]...)
 		}
 	}

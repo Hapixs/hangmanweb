@@ -5,75 +5,62 @@ import (
 	"os"
 )
 
-var game *HangmanGame = &HangmanGame{}
-
-func GetGame() *HangmanGame {
-	return game
-}
-
-func SetGame(HangmanGame *HangmanGame) {
-	game = HangmanGame
-}
-
-func AddGameTry() int {
+func (game *HangmanGame) AddGameTry() int {
 	game.Tries++
-	if game.Tries > maxTries {
-		game.Tries = maxTries
+	maxtries, _, _ := game.Config.GetConfigItem(ConfigMaxTries)
+	if game.Tries > maxtries {
+		game.Tries = maxtries
 	}
 	return game.Tries
 }
 
-func GetGameTries() int {
+func (game *HangmanGame) GetGameTries() int {
 	return game.Tries
 }
 
-func SetGameWord(word string) string {
+func (game *HangmanGame) SetGameWord(word string) string {
 	game.Word = word
 	return game.Word
 }
 
-func GetGameToFindEncoded() string {
+func (game *HangmanGame) GetGameToFindEncoded() string {
 	return game.EncodedToFind
 }
 
-func SetGameToFindEncoded(tofind string) string {
+func (game *HangmanGame) SetGameToFindEncoded(tofind string) string {
 	game.EncodedToFind = tofind
 	return game.tofind
 }
 
-func GetGameWord() string {
+func (game *HangmanGame) GetGameWord() string {
 	return game.Word
 }
 
-func SetGameToFind(tofind string) string {
+func (game *HangmanGame) SetGameToFind(tofind string) string {
 	game.tofind = tofind
 	return game.tofind
 }
 
-func GetGameToFind() string {
-	_, b, _ := GetConfigItem(ConfigUseAscii)
+func (game *HangmanGame) GetGameToFind() string {
+	_, b, _ := game.Config.GetConfigItem(ConfigUseAscii)
 	if b {
 		return ConvertToUnicode(game.tofind)
 	}
 	return game.tofind
 }
 
-func GetGameUsed() string {
+func (game *HangmanGame) GetGameUsed() string {
 	return game.Used
 }
 
-func AddGameUsed(r rune) string {
+func (game *HangmanGame) AddGameUsed(r rune) string {
 	game.Used += string(r)
 	return game.Used
 }
 
-func GetGameSave() GameSave {
-	return GameSave{*game, GetGameConfig()}
-}
-
-func SaveGame() {
-	_, _, fileName := GetConfigItem(ConfigSaveFile)
-	saveEnc, err := json.Marshal(GetGameSave())
+func (game *HangmanGame) SaveGame() {
+	_, _, fileName := game.Config.GetConfigItem(ConfigSaveFile)
+	saveEnc, err := json.Marshal(game)
 	if err != nil {
 		println("Error: JSON error")
 		return
@@ -89,28 +76,26 @@ func SaveGame() {
 	file.Close()
 }
 
-func LoadSave(fileName string) error {
+func (game *HangmanGame) LoadSave(fileName string) (HangmanGame, error) {
 	content, err := os.ReadFile(fileName)
 	if err != nil {
 		println("Error: File " + fileName + " doesn't exist ! please specify a existing one.")
-		return err
+		return HangmanGame{}, err
 	}
 
-	gameSave := &GameSave{}
+	Game := HangmanGame{}
 
-	er := json.Unmarshal([]byte(DecodeStrInBase64(string(content))), gameSave)
+	er := json.Unmarshal([]byte(DecodeStrInBase64(string(content))), Game)
 
 	if er != nil {
 		println("Error: File " + fileName + " doesn't exist ! please specify a existing one.")
-		return err
+		return HangmanGame{}, err
 	}
 
-	SetGame(&gameSave.Game)
-	SetGameConfig(gameSave.Config)
 	FromSave = true
-	return nil
+	return Game, nil
 }
 
-func ResetTempData() {
-	game.Used = ""
+func (g *HangmanGame) GetConfig() *GameConfig {
+	return &g.Config
 }

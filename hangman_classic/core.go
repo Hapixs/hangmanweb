@@ -5,45 +5,56 @@ import (
 	"strconv"
 )
 
-var maxTries, _, _ = GetConfigItem(ConfigMaxTries)
-var gameMode, _, _ = GetConfigItem(ConfigGameMode)
 var isInit = false
 
-func InitGame() {
+func (game *HangmanGame) InitGame() {
 	args := os.Args[1:]
 
-	GameProcessArguments(args)
+	game.Config.InitConfig()
+
+	game.GameProcessArguments(args)
+
+	gc := Gamecache{}
 
 	InitEnvironement()
-	InitGameCache()
-	InitUI()
-	InitGameExecutions()
+	gc.InitGameCache(game)
+	game.cache = gc
 
-	maxTries, _, _ = GetConfigItem(ConfigMaxTries)
-	gameMode, _, _ = GetConfigItem(ConfigGameMode)
-	addInformationHeadMessage("Good Luck, you have " + strconv.Itoa(maxTries-game.Tries) + "  attempts.")
+	game.InitGameExecutions()
+
+	maxTries, _, _ := game.Config.GetConfigItem(ConfigMaxTries)
+	AddInformationHeadMessage("Good Luck, you have " + strconv.Itoa(maxTries-game.Tries) + "  attempts.")
 	isInit = true
+	game.Gamestatus = PLAYING
 }
 
-func StartGame() {
+func (game *HangmanGame) StartGame() {
 	if !isInit {
-		InitGame()
+		game.InitGame()
 	}
-	for {
+	go game.processExecutionsFunc()
+}
+
+func (game *HangmanGame) Kill() {
+	game.Gamestatus = ENDED
+}
+
+func (game *HangmanGame) processExecutionsFunc() {
+	for game.Gamestatus == PLAYING {
 		userInput := ""
-		for _, execution := range Executions {
-			if execution.Func(&userInput) {
+		for _, execution := range game.executions {
+			if execution.Func(&userInput, game) {
 				break
 			}
 		}
 	}
 }
 
-func WinGame() {
-	DisplayWinLogo()
-	StopGame()
+func (game *HangmanGame) WinGame() {
+	game.DisplayWinLogo()
+	QuitGame()
 }
 
-func StopGame() {
+func QuitGame() {
 	os.Exit(0)
 }

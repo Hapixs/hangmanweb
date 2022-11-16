@@ -1,52 +1,48 @@
 package hangman_classic
 
-var Executions = []GameExecution{}
-
-func InitGameExecutions() {
-
-	Executions = append(Executions, executionLookForAutoSave)
-	Executions = append(Executions, executionDisplayBody)
-	Executions = append(Executions, executionCheckForRemainingTries)
-	Executions = append(Executions, executionWaitForInput)
-	Executions = append(Executions, executionCheckForWord)
-	Executions = append(Executions, executionCheckForVowel)
-	Executions = append(Executions, executionCheckLetterIsUsed)
-	Executions = append(Executions, executionCheckForLetterOccurence)
-	Executions = append(Executions, executionCheckForWordDiscover)
-	Executions = append(Executions, executionAddToUsedLetter)
-
+func (g *HangmanGame) InitGameExecutions() {
+	g.executions = append(g.executions, executionLookForAutoSave)
+	g.executions = append(g.executions, executionDisplayBody)
+	g.executions = append(g.executions, executionCheckForRemainingTries)
+	g.executions = append(g.executions, executionWaitForInput)
+	g.executions = append(g.executions, executionCheckForWord)
+	g.executions = append(g.executions, executionCheckForVowel)
+	g.executions = append(g.executions, executionCheckLetterIsUsed)
+	g.executions = append(g.executions, executionCheckForLetterOccurence)
+	g.executions = append(g.executions, executionCheckForWordDiscover)
+	g.executions = append(g.executions, executionAddToUsedLetter)
 }
 
-func AddGameExecution(exec GameExecution) {
-	Executions = append(Executions, exec)
+func (g *HangmanGame) AddGameExecution(exec GameExecution) {
+	g.executions = append(g.executions, exec)
 }
 
-func ReplaceExecution(exec GameExecution, targetName string) {
-	for i, e := range Executions {
+func (g *HangmanGame) ReplaceExecution(exec GameExecution, targetName string) {
+	for i, e := range g.executions {
 		if e.Name == targetName {
-			Executions[i] = exec
+			g.executions[i] = exec
 			return
 		}
 	}
 	println("Unable to find " + targetName + " execution in the list.")
 }
 
-func AddAfterExecution(exec GameExecution, targetName string) {
-	for i, e := range Executions {
+func (g *HangmanGame) AddAfterExecution(exec GameExecution, targetName string) {
+	for i, e := range g.executions {
 		if e.Name == targetName {
-			t := Executions[i:]
-			Executions = append(append(Executions[:i], exec), t...)
+			t := g.executions[i:]
+			g.executions = append(append(g.executions[:i], exec), t...)
 			return
 		}
 	}
 	println("Unable to find " + targetName + " execution in the list.")
 }
 
-func AddBeforeExecution(exec GameExecution, targetName string) {
-	for i, e := range Executions {
+func (g *HangmanGame) AddBeforeExecution(exec GameExecution, targetName string) {
+	for i, e := range g.executions {
 		if e.Name == targetName {
-			t := Executions[i-1:]
-			Executions = append(append(Executions[:i-1], exec), t...)
+			t := g.executions[i-1:]
+			g.executions = append(append(g.executions[:i-1], exec), t...)
 			return
 		}
 	}

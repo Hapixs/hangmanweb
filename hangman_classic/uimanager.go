@@ -6,104 +6,73 @@ import (
 	"runtime"
 	"strconv"
 	"time"
-
-	"github.com/rivo/tview"
 )
 
 var informationHeadMessages = []string{}
-var debugMessages = []string{}
-var inforamtionFooterMessages = []string{}
 
-var useBetterTerminal = false
-
-var termApplication = tview.NewApplication()
-var termRoot = tview.NewFlex()
-
-func InitUI() {
-	_, useBetterTerminal, _ = GetConfigItem(ConfigBetterTerminal)
-	if useBetterTerminal {
-		err := termApplication.SetRoot(termRoot, true).Run()
-		if err != nil {
-			useBetterTerminal = false
-			println("Error: unable to use better terminal feature")
-		}
+func (game *HangmanGame) DisplayBody() {
+	_, clearscreen, _ := game.Config.GetConfigItem(ConfigAutoClear)
+	if clearscreen {
+		ClearScreen()
 	}
-}
-
-func DisplayBody() {
-	if useBetterTerminal {
-		termRoot.Clear()
-		hangmanLogo := ""
-		for _, line := range BuildASCIIWord("HANGMAN") {
-			hangmanLogo += line + "\n"
+	println(informationHeadMessages[len(informationHeadMessages)-1])
+	_, useAscii, _ := game.Config.GetConfigItem(ConfigUseAscii)
+	if useAscii {
+		for _, line := range game.cache.BuildASCIIWord(game.GetGameWord()) {
+			println(line)
 		}
-		termRoot.SetDirection(tview.FlexColumn)
-		termRoot.AddItem(tview.NewTextView().SetText(hangmanLogo), 0, 1, false)
-		termRoot.AddItem(tview.NewFlex().
-			AddItem(tview.NewTextView().SetText("GAME"), 0, 1, false).
-			AddItem(tview.NewTextView().SetText("HELP"), 0, 1, false), 0, 1, false)
-		termApplication.SetRoot(termRoot, true)
 	} else {
-		_, clearscreen, _ := GetConfigItem(ConfigAutoClear)
-		if clearscreen {
-			ClearScreen()
-		}
-		println(informationHeadMessages[len(informationHeadMessages)-1])
-		_, useAscii, _ := GetConfigItem(ConfigUseAscii)
-		if useAscii {
-			for _, line := range BuildASCIIWord(GetGameWord()) {
-				println(line)
-			}
-		} else {
-			println(GetGameWord())
-		}
-
-		for _, v := range GetCacheHangmanByIndex(GetGameTries()) {
-			println(v)
-		}
-
-		if gameMode != HARD {
-			println("Used: " + GetGameUsed())
-		}
-		println("You have " + strconv.Itoa(maxTries-GetGameTries()) + " mistakes left.")
-		print("Choose: ")
+		println(game.GetGameWord())
 	}
+
+	for _, v := range game.cache.HangmanByStatus[game.GetGameTries()] {
+		println(v)
+	}
+
+	gameMode, _, _ := game.Config.GetConfigItem(ConfigGameMode)
+	maxTries, _, _ := game.Config.GetConfigItem(ConfigMaxTries)
+
+	if gameMode != HARD {
+		println("Used: " + game.GetGameUsed())
+	}
+	println("You have " + strconv.Itoa(maxTries-game.GetGameTries()) + " mistakes left.")
+	print("Choose: ")
 }
 
-func addInformationHeadMessage(message string) {
+func AddInformationHeadMessage(message string) {
 	informationHeadMessages = append(informationHeadMessages, message)
 }
 
-func DisplayLooseLogo() {
+func (game *HangmanGame) DisplayLooseLogo() {
 	speed := time.Second / 5
 	gameover := ""
 	for _, c := range "OH SNAP !" {
 		ClearScreen()
 		gameover += string(c)
-		display := BuildASCIIWord(gameover)
+		display := game.cache.BuildASCIIWord(gameover)
 		for _, line := range display {
 			println(line)
 		}
 		time.Sleep(speed)
 	}
 
-	println("The word was " + GetGameToFind())
+	println("The word was " + game.GetGameToFind())
 }
 
-func DisplayWinLogo() {
+func (game *HangmanGame) DisplayWinLogo() {
 	speed := time.Second / 5
 	gameover := ""
 	for _, c := range "YOU WIN !" {
 		ClearScreen()
 		gameover += string(c)
-		display := BuildASCIIWord(gameover)
+		display := game.cache.BuildASCIIWord(gameover)
 		for _, line := range display {
 			println(line)
 		}
 		time.Sleep(speed)
 	}
 
-	println("The word was " + GetGameToFind())
+	println("The word was " + game.GetGameToFind())
 }
 
 func ClearScreen() {

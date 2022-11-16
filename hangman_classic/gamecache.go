@@ -5,16 +5,16 @@ import (
 	"strings"
 )
 
-var hangmanByStatus = map[int]([]string){}
-var words []string
-var asciiByChar = map[rune]([]string){}
+type Gamecache struct {
+	HangmanByStatus map[int]([]string)
+	Words           []string
+	AsciiByChar     map[rune]([]string)
+}
 
 var FromSave = false
 
-func InitGameCache() {
-
-	ResetTempData()
-	_, _, fileName := GetConfigItem(ConfigWordsList)
+func (c *Gamecache) InitGameCache(game *HangmanGame) {
+	_, _, fileName := game.Config.GetConfigItem(ConfigWordsList)
 	if len(fileName) <= 0 {
 		println("Please specify a word file")
 		os.Exit(1)
@@ -24,9 +24,9 @@ func InitGameCache() {
 		println("Error! Unable to load word list '" + fileName + "'")
 		os.Exit(1)
 	}
-	words = strings.Split(string(content), "\n")
+	c.Words = strings.Split(string(content), "\n")
 
-	_, _, hangmanFileName := GetConfigItem(ConfigHangmanFile)
+	_, _, hangmanFileName := game.Config.GetConfigItem(ConfigHangmanFile)
 	content, err = os.ReadFile(hangmanFileName)
 	if err != nil {
 		println("Error! Unable to load hangman list '" + fileName + "'")
@@ -34,15 +34,16 @@ func InitGameCache() {
 	}
 	hangmanStatContentSplited := strings.Split(string(content), "\n")
 
-	maxTires, _, _ := GetConfigItem(ConfigMaxTries)
-	for i := 0; i < maxTires; i++ {
-		hangmanHeight, _, _ := GetConfigItem(ConfigHangmanHeight)
+	maxTries, _, _ := game.Config.GetConfigItem(ConfigMaxTries)
+	c.HangmanByStatus = make(map[int][]string, maxTries)
+	for i := 0; i < maxTries; i++ {
+		hangmanHeight, _, _ := game.Config.GetConfigItem(ConfigHangmanHeight)
 		currentMin := i * hangmanHeight
 		currentMax := currentMin + hangmanHeight
-		hangmanByStatus[i+1] = hangmanStatContentSplited[currentMin:currentMax]
+		c.HangmanByStatus[i+1] = hangmanStatContentSplited[currentMin:currentMax]
 	}
 
-	_, _, asciiFileName := GetConfigItem(ConfigASCIIFile)
+	_, _, asciiFileName := game.Config.GetConfigItem(ConfigASCIIFile)
 
 	content, err = os.ReadFile(asciiFileName)
 	if err != nil {
@@ -51,40 +52,29 @@ func InitGameCache() {
 	}
 
 	asciiCharacterContentSplited := strings.Split(string(content), "\n")
+	c.AsciiByChar = make(map[rune][]string)
 	for i := 0; i < 127-32; i++ {
-		asciiHeight, _, _ := GetConfigItem(ConfigASCIIHeight)
+		asciiHeight, _, _ := game.Config.GetConfigItem(ConfigASCIIHeight)
 		currentMin := i * asciiHeight
 		currentMax := currentMin + asciiHeight
-		asciiByChar[rune(i+32)] = asciiCharacterContentSplited[currentMin:currentMax]
+		c.AsciiByChar[rune(i+32)] = asciiCharacterContentSplited[currentMin:currentMax]
 	}
 	if !FromSave {
-		wordToFind := strings.ReplaceAll(GetRandomWord(words), "\r", "")
+		wordToFind := strings.ReplaceAll(GetRandomWord(c.Words), "\r", "")
 		wordToFind = strings.ReplaceAll(wordToFind, "\n", "")
-		SetGameToFindEncoded(EncodeStrInBase64(string(GetEncodedStringInSha256(wordToFind))) + " # Lol tu le trouvra pas !")
-		SetGameToFind(wordToFind)
-		SetGameWord(SetupGameWord(wordToFind))
+		game.SetGameToFindEncoded(EncodeStrInBase64(string(GetEncodedStringInSha256(wordToFind))) + " # Lol tu le trouvra pas !")
+		game.SetGameToFind(wordToFind)
+		game.SetGameWord(game.SetupGameWord(wordToFind))
 	} else {
-		for _, word := range GetCacheWordList() {
+		for _, word := range c.Words {
 			word = strings.ReplaceAll(word, "\r", "")
 			word = strings.ReplaceAll(word, "\n", "")
-			if EncodeStrInBase64(string(GetEncodedStringInSha256(word))) == strings.Split(GetGameToFindEncoded(), " # Lol tu le trouvra pas !")[0] {
-				SetGameToFind(word)
+			if EncodeStrInBase64(string(GetEncodedStringInSha256(word))) == strings.Split(game.GetGameToFindEncoded(), " # Lol tu le trouvra pas !")[0] {
+				game.SetGameToFind(word)
 				return
 			}
 		}
 		println("Unable to load, save corrupted..")
 		os.Exit(1)
 	}
-}
-
-func GetCacheHangmanByIndex(index int) []string {
-	return hangmanByStatus[index]
-}
-
-func GetCacheWordList() []string {
-	return words
-}
-
-func GetASCIIArtFromRune(r rune) []string {
-	return asciiByChar[r]
 }

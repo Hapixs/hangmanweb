@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"hangman_classic"
 	"net/http"
+	"os"
 	"sync"
 )
 
@@ -12,7 +13,7 @@ var WebInputbuffer = bytes.Buffer{}
 func StartServer() {
 	InitWebHandlers()
 	StartWorkers()
-	StartHangmanClassic()
+	http.ListenAndServe(":8080", nil)
 }
 
 func InitWebHandlers() {
@@ -22,7 +23,6 @@ func InitWebHandlers() {
 }
 
 var webgroup sync.WaitGroup
-var hangmangroup sync.WaitGroup
 
 func StartWorkers() {
 	webgroup.Add(1)
@@ -30,25 +30,22 @@ func StartWorkers() {
 }
 
 func StartHangmanClassic() {
-	hangman_classic.SetConfigItemValue(hangman_classic.ConfigWordsList, "words.txt")
-	hangman_classic.InitGame()
-	hangman_classic.ReplaceExecution(overridedExecutionWaitForInput, string(hangman_classic.DefaultExecutionWaitForInput))
-	hangman_classic.ReplaceExecution(overridedExecutionCheckForRemainingTries, string(hangman_classic.DefaultExecutionCheckForRemainingTries))
-	hangman_classic.ReplaceExecution(overridedExecutionCheckForWordDiscover, string(hangman_classic.DefaultExecutionCheckForWordDiscover))
-	hangman_classic.StartGame()
+	Game = &hangman_classic.HangmanGame{}
+	os.Args = append(os.Args, "words.txt")
+	Game.InitGame()
+	Game.ReplaceExecution(overridedExecutionWaitForInput, string(hangman_classic.DefaultExecutionWaitForInput))
+	Game.ReplaceExecution(overridedExecutionCheckForRemainingTries, string(hangman_classic.DefaultExecutionCheckForRemainingTries))
+	Game.ReplaceExecution(overridedExecutionCheckForWordDiscover, string(hangman_classic.DefaultExecutionCheckForWordDiscover))
+	Game.ReplaceExecution(overridedExecutionCheckForWord, string(hangman_classic.DefaultExecutionCheckForWord))
+	Game.StartGame()
 }
 
 func RestartHangman() {
-
-	hangman_classic.SetConfigItemValue(hangman_classic.ConfigWordsList, "words.txt")
-	hangman_classic.InitGame()
-	hangman_classic.ReplaceExecution(overridedExecutionWaitForInput, string(hangman_classic.DefaultExecutionWaitForInput))
-	hangman_classic.ReplaceExecution(overridedExecutionCheckForRemainingTries, string(hangman_classic.DefaultExecutionCheckForRemainingTries))
-	hangman_classic.ReplaceExecution(overridedExecutionCheckForWordDiscover, string(hangman_classic.DefaultExecutionCheckForWordDiscover))
-	hangman_classic.DisplayBody()
+	Game.Kill()
+	StartWorkers()
 }
 
 func WebWorkerFunc(wg *sync.WaitGroup, id int) {
 	defer wg.Done()
-	http.ListenAndServe(":8080", nil)
+	StartHangmanClassic()
 }

@@ -6,6 +6,11 @@ type HangmanGame struct {
 	EncodedToFind string
 	tofind        string
 	Used          string
+	Config        GameConfig
+
+	Gamestatus int
+	cache      Gamecache
+	executions []GameExecution
 }
 
 type ConfigItemBoolean struct {
@@ -28,13 +33,8 @@ type GameConfig struct {
 	StringItems map[ConfigKey]ConfigItemString
 }
 
-type GameSave struct {
-	Game   HangmanGame
-	Config GameConfig
-}
-
 type CommandFlag struct {
-	FlagExecutor func(args []string) []string
+	FlagExecutor func(game *HangmanGame, args []string) []string
 	Description  string
 	Usage        string
 	IsAliase     bool
@@ -43,12 +43,17 @@ type CommandFlag struct {
 
 type GameExecution struct {
 	Name string
-	Func func(userInput *string) bool
+	Func func(userInput *string, game *HangmanGame) bool
 }
 
 const (
 	NORMAL = 0
 	HARD   = 1
+)
+
+const (
+	PLAYING = 0
+	ENDED   = 1
 )
 
 type ConfigKey string

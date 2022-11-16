@@ -5,28 +5,29 @@ import (
 	"os"
 )
 
-var executionCheckForRemainingTries = GameExecution{string(DefaultExecutionCheckForRemainingTries), func(userInput *string) bool {
-	if GetGameTries() >= maxTries {
-		DisplayLooseLogo()
-		StopGame()
+var executionCheckForRemainingTries = GameExecution{string(DefaultExecutionCheckForRemainingTries), func(userInput *string, game *HangmanGame) bool {
+	maxTries, _, _ := game.Config.GetConfigItem(ConfigMaxTries)
+	if game.GetGameTries() >= maxTries {
+		game.DisplayLooseLogo()
+		QuitGame()
 	}
 	return false
 }}
 
-var executionLookForAutoSave = GameExecution{string(DefaultExecutionLookForAutoSave), func(userInput *string) bool {
-	_, autoSaveStatus, _ := GetConfigItem(ConfigAutoSave)
+var executionLookForAutoSave = GameExecution{string(DefaultExecutionLookForAutoSave), func(userInput *string, game *HangmanGame) bool {
+	_, autoSaveStatus, _ := game.Config.GetConfigItem(ConfigAutoSave)
 	if autoSaveStatus {
-		SaveGame()
+		game.SaveGame()
 	}
 	return false
 }}
 
-var executionDisplayBody = GameExecution{string(DefaultExecutionDisplayBody), func(userInput *string) bool {
-	DisplayBody()
+var executionDisplayBody = GameExecution{string(DefaultExecutionDisplayBody), func(userInput *string, game *HangmanGame) bool {
+	game.DisplayBody()
 	return false
 }}
 
-var executionWaitForInput = GameExecution{string(DefaultExecutionWaitForInput), func(userInput *string) bool {
+var executionWaitForInput = GameExecution{string(DefaultExecutionWaitForInput), func(userInput *string, game *HangmanGame) bool {
 	reader := bufio.NewReader(os.Stdin)
 	in, _ := reader.ReadBytes(byte('\n'))
 	if len(string(in)) <= 0 {
@@ -36,43 +37,45 @@ var executionWaitForInput = GameExecution{string(DefaultExecutionWaitForInput), 
 	return false
 }}
 
-var executionCheckForWord = GameExecution{string(DefaultExecutionCheckForWord), func(userInput *string) bool {
+var executionCheckForWord = GameExecution{string(DefaultExecutionCheckForWord), func(userInput *string, game *HangmanGame) bool {
 	if len(*userInput) > 1 {
 		if string(*userInput) == "STOP" {
-			SaveGame()
-			StopGame()
+			game.SaveGame()
+			QuitGame()
 		}
-		if GetGameToFind() == *userInput {
-			WinGame()
+		if game.GetGameToFind() == *userInput {
+			game.WinGame()
 		}
-		AddGameTry()
-		AddGameTry()
-		addInformationHeadMessage("This is not the correct word !")
+		game.AddGameTry()
+		game.AddGameTry()
+		AddInformationHeadMessage("This is not the correct word !")
 		return true
 	}
 
 	return false
 }}
 
-var executionCheckForVowel = GameExecution{string(DefaultExecutionCheckForVowel), func(userInput *string) bool {
+var executionCheckForVowel = GameExecution{string(DefaultExecutionCheckForVowel), func(userInput *string, game *HangmanGame) bool {
 	rn := []rune(*userInput)[0]
-	if gameMode == HARD && isVowel(rn) && VowelCount(GetGameUsed()) >= 3 {
-		addInformationHeadMessage("You can't use vowel anymore !")
-		AddGameTry()
-		executionAddToUsedLetter.Func(userInput)
+	gameMode, _, _ := game.Config.GetConfigItem(ConfigGameMode)
+	if gameMode == HARD && isVowel(rn) && VowelCount(game.GetGameUsed()) >= 3 {
+		AddInformationHeadMessage("You can't use vowel anymore !")
+		game.AddGameTry()
+		executionAddToUsedLetter.Func(userInput, game)
 		return true
 	}
 	return false
 }}
 
-var executionCheckLetterIsUsed = GameExecution{string(DefaultExecutionLetterIsUsed), func(userInput *string) bool {
+var executionCheckLetterIsUsed = GameExecution{string(DefaultExecutionLetterIsUsed), func(userInput *string, game *HangmanGame) bool {
 	rn := []rune(*userInput)[0]
-	if HasOccurenceLetter(GetGameUsed(), rn) && gameMode != HARD {
-		addInformationHeadMessage("You already use this letter")
+	gameMode, _, _ := game.Config.GetConfigItem(ConfigGameMode)
+	if HasOccurenceLetter(game.GetGameUsed(), rn) && gameMode != HARD {
+		AddInformationHeadMessage("You already use this letter")
 		if gameMode == HARD {
-			AddGameTry()
+			game.AddGameTry()
 			if isVowel(rn) {
-				AddGameTry()
+				game.AddGameTry()
 			}
 		}
 		return true
@@ -80,27 +83,27 @@ var executionCheckLetterIsUsed = GameExecution{string(DefaultExecutionLetterIsUs
 	return false
 }}
 
-var executionCheckForLetterOccurence = GameExecution{string(DefaultExecutionCheckForLetterOccurence), func(userInput *string) bool {
+var executionCheckForLetterOccurence = GameExecution{string(DefaultExecutionCheckForLetterOccurence), func(userInput *string, game *HangmanGame) bool {
 	rn := []rune(*userInput)[0]
-	if !HasOccurenceLetter(GetGameToFind(), rune(rn)) {
-		AddGameTry()
-		addInformationHeadMessage(string(rn) + " is not in this word..")
+	if !HasOccurenceLetter(game.GetGameToFind(), rune(rn)) {
+		game.AddGameTry()
+		AddInformationHeadMessage(string(rn) + " is not in this word..")
 	} else {
-		SetGameWord(UpdateGameWord(GetGameToFind(), GetGameWord(), rn))
+		game.SetGameWord(game.UpdateGameWord(game.GetGameToFind(), game.GetGameWord(), rn))
 	}
 	return false
 }}
 
-var executionCheckForWordDiscover = GameExecution{string(DefaultExecutionCheckForWordDiscover), func(userInput *string) bool {
-	if !HasOccurenceLetter(GetGameWord(), '_') {
-		WinGame()
+var executionCheckForWordDiscover = GameExecution{string(DefaultExecutionCheckForWordDiscover), func(userInput *string, game *HangmanGame) bool {
+	if !HasOccurenceLetter(game.GetGameWord(), '_') {
+		game.WinGame()
 		return true
 	}
 	return false
 }}
 
-var executionAddToUsedLetter = GameExecution{string(DefaultExecutionAddToUsedLetter), func(userInput *string) bool {
+var executionAddToUsedLetter = GameExecution{string(DefaultExecutionAddToUsedLetter), func(userInput *string, game *HangmanGame) bool {
 	rn := []rune(*userInput)[0]
-	AddGameUsed(rn)
+	game.AddGameUsed(rn)
 	return false
 }}

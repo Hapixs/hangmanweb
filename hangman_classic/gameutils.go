@@ -31,17 +31,18 @@ func GetOccurenceLetter(word string, letterToCheck rune) []int {
 	return occ
 }
 
-func UpdateGameWord(toFind string, word string, letterToCheck rune) string {
+func (game *HangmanGame) UpdateGameWord(toFind string, word string, letterToCheck rune) string {
 	wordR := []rune(word)
 	indexs := GetOccurenceLetter(toFind, letterToCheck)
 	for _, index := range indexs {
 		wordR[index] = letterToCheck
 	}
 	word = string(wordR)
+	game.Word = word
 	return word
 }
 
-func SetupGameWord(startupword string) string {
+func (game *HangmanGame) SetupGameWord(startupword string) string {
 	size := len([]rune(startupword))
 	runeTableWord := make([]rune, size)
 	for i := 0; i < len(runeTableWord); i++ {
@@ -62,9 +63,10 @@ func SetupGameWord(startupword string) string {
 		}
 	}
 	for _, letter := range listOfLettersGiven {
-		runeTableWord = []rune(UpdateGameWord(startupword, string(runeTableWord), letter))
-		AddGameUsed(letter)
+		runeTableWord = []rune(game.UpdateGameWord(startupword, string(runeTableWord), letter))
+		game.AddGameUsed(letter)
 	}
+	game.Word = string(runeTableWord)
 	return string(runeTableWord)
 }
 
@@ -81,10 +83,10 @@ func VowelCount(str string) int {
 	return count
 }
 
-func BuildASCIIWord(word string) []string {
+func (c *Gamecache) BuildASCIIWord(word string) []string {
 	words := make([]string, 9)
 	for _, runes := range word {
-		for i, line := range GetASCIIArtFromRune(runes) {
+		for i, line := range c.AsciiByChar[runes] {
 			for _, r := range line {
 				if r > 31 && r < 126 {
 					words[i] = words[i] + string(r)
