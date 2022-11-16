@@ -5,6 +5,21 @@ import (
 	"sort"
 )
 
+type CommandFlag struct {
+	FlagExecutor func(game *HangmanGame, args []string) []string
+	Description  string
+	Usage        string
+	IsAliase     bool
+	AliaseOf     string
+}
+
+type FlagHelpContent struct {
+	Principal   string
+	Description string
+	Usage       string
+	Aliases     []string
+}
+
 var flagExecutors = map[string](CommandFlag){
 	"-hm":        CommandFlag{flagHardModeExecutor, "Change to hard mode", "-hm", false, "-hm"},
 	"--hardmode": CommandFlag{nil, "", "", true, "-hm"},
@@ -61,7 +76,7 @@ func flagStartWithExecutor(game *HangmanGame, args []string) []string {
 	if len(args) <= 1 {
 		println("[Warn] Please specify a file after --startWith !")
 	} else {
-		games, err := game.LoadSave(args[1])
+		games, err := LoadSave(args[1])
 		if err != nil {
 			println("[Warn] Save file not found !")
 		}
@@ -221,13 +236,6 @@ func (game *HangmanGame) GameProcessArguments(args []string) {
 			args = append(args[:0], args[1:]...)
 		}
 	}
-}
-
-type FlagHelpContent struct {
-	Principal   string
-	Description string
-	Usage       string
-	Aliases     []string
 }
 
 func BuildFlagHelpMenu() []string {

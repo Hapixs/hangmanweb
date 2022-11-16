@@ -8,7 +8,7 @@ import (
 
 var overridedExecutionWaitForInput = hangman_classic.GameExecution{Name: string(hangman_classic.DefaultExecutionWaitForInput), Func: func(userInput *string, game *hangman_classic.HangmanGame) bool {
 	for WebInputbuffer.Len() <= 0 {
-		if game.Gamestatus == hangman_classic.ENDED {
+		if game.Gamestatus == int(hangman_classic.ENDED) {
 			return true
 		}
 	}

@@ -1,10 +1,9 @@
 package main
 
-import (
-	hangmanweb "hangman_web"
-)
+import hangmanweb "hangman_web"
 
 func main() {
-	//hangman_classic.StartGame()
+	//Game := hangman_classic.HangmanGame{}
+	//Game.StartGame()
 	hangmanweb.StartServer()
 }

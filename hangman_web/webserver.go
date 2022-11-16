@@ -37,6 +37,7 @@ func StartHangmanClassic() {
 	Game.ReplaceExecution(overridedExecutionCheckForRemainingTries, string(hangman_classic.DefaultExecutionCheckForRemainingTries))
 	Game.ReplaceExecution(overridedExecutionCheckForWordDiscover, string(hangman_classic.DefaultExecutionCheckForWordDiscover))
 	Game.ReplaceExecution(overridedExecutionCheckForWord, string(hangman_classic.DefaultExecutionCheckForWord))
+	Game.Config.SetConfigItemValue(hangman_classic.ConfigMultipleWorkers, true)
 	Game.StartGame()
 }
 

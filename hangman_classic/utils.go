@@ -3,7 +3,9 @@ package hangman_classic
 import (
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/json"
 	"math/rand"
+	"os"
 	"strings"
 )
 
@@ -29,45 +31,6 @@ func GetOccurenceLetter(word string, letterToCheck rune) []int {
 		}
 	}
 	return occ
-}
-
-func (game *HangmanGame) UpdateGameWord(toFind string, word string, letterToCheck rune) string {
-	wordR := []rune(word)
-	indexs := GetOccurenceLetter(toFind, letterToCheck)
-	for _, index := range indexs {
-		wordR[index] = letterToCheck
-	}
-	word = string(wordR)
-	game.Word = word
-	return word
-}
-
-func (game *HangmanGame) SetupGameWord(startupword string) string {
-	size := len([]rune(startupword))
-	runeTableWord := make([]rune, size)
-	for i := 0; i < len(runeTableWord); i++ {
-		runeTableWord[i] = '_'
-	}
-	for nbLettersToShow := len([]rune(runeTableWord))/2 - 1; nbLettersToShow > 0; nbLettersToShow-- {
-		randomTableI := rand.Intn(len([]rune(runeTableWord)))
-		if runeTableWord[randomTableI] != '_' {
-			nbLettersToShow++
-		} else {
-			runeTableWord[randomTableI] = []rune(startupword)[randomTableI]
-		}
-	}
-	listOfLettersGiven := make([]rune, len([]rune(runeTableWord)))
-	for _, letter := range runeTableWord {
-		if letter != '_' {
-			listOfLettersGiven = append(listOfLettersGiven, letter)
-		}
-	}
-	for _, letter := range listOfLettersGiven {
-		runeTableWord = []rune(game.UpdateGameWord(startupword, string(runeTableWord), letter))
-		game.AddGameUsed(letter)
-	}
-	game.Word = string(runeTableWord)
-	return string(runeTableWord)
 }
 
 func isVowel(r rune) bool {
@@ -157,4 +120,30 @@ func GetEncodedStringInSha256(str string) []byte {
 	h := sha256.New()
 	h.Write([]byte(str))
 	return h.Sum([]byte{})
+}
+
+func LoadSave(fileName string) (HangmanGame, error) {
+	content, err := os.ReadFile(fileName)
+	if err != nil {
+		println("Error: File " + fileName + " doesn't exist ! please specify a existing one.")
+		return HangmanGame{}, err
+	}
+
+	Game := HangmanGame{}
+
+	er := json.Unmarshal([]byte(DecodeStrInBase64(string(content))), &Game)
+
+	if er != nil {
+		println("Error: File " + fileName + " doesn't exist ! please specify a existing one.")
+		return HangmanGame{}, err
+	}
+
+	FromSave = true
+	return Game, nil
+}
+
+// Need to be moved
+
+func QuitGame() {
+	os.Exit(0)
 }

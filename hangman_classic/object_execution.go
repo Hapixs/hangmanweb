@@ -5,6 +5,75 @@ import (
 	"os"
 )
 
+type GameExecution struct {
+	Name string
+	Func func(userInput *string, game *HangmanGame) bool
+}
+
+type DefaultExecution string
+
+const (
+	DefaultExecutionCheckForRemainingTries  DefaultExecution = "checkforremainingtries"
+	DefaultExecutionLookForAutoSave         DefaultExecution = "lookforautosave"
+	DefaultExecutionDisplayBody             DefaultExecution = "displaybody"
+	DefaultExecutionWaitForInput            DefaultExecution = "waitforinput"
+	DefaultExecutionCheckForWord            DefaultExecution = "checkforword"
+	DefaultExecutionCheckForVowel           DefaultExecution = "checkforvowel"
+	DefaultExecutionLetterIsUsed            DefaultExecution = "letterisused"
+	DefaultExecutionCheckForLetterOccurence DefaultExecution = "checkforletteroccurence"
+	DefaultExecutionCheckForWordDiscover    DefaultExecution = "checkforworddiscover"
+	DefaultExecutionAddToUsedLetter         DefaultExecution = "addtousedletter"
+)
+
+func (g *HangmanGame) InitGameExecutions() {
+	g.executions = append(g.executions, executionLookForAutoSave)
+	g.executions = append(g.executions, executionDisplayBody)
+	g.executions = append(g.executions, executionCheckForRemainingTries)
+	g.executions = append(g.executions, executionWaitForInput)
+	g.executions = append(g.executions, executionCheckForWord)
+	g.executions = append(g.executions, executionCheckForVowel)
+	g.executions = append(g.executions, executionCheckLetterIsUsed)
+	g.executions = append(g.executions, executionCheckForLetterOccurence)
+	g.executions = append(g.executions, executionCheckForWordDiscover)
+	g.executions = append(g.executions, executionAddToUsedLetter)
+}
+
+func (g *HangmanGame) AddGameExecution(exec GameExecution) {
+	g.executions = append(g.executions, exec)
+}
+
+func (g *HangmanGame) ReplaceExecution(exec GameExecution, targetName string) {
+	for i, e := range g.executions {
+		if e.Name == targetName {
+			g.executions[i] = exec
+			return
+		}
+	}
+	println("Unable to find " + targetName + " execution in the list.")
+}
+
+func (g *HangmanGame) AddAfterExecution(exec GameExecution, targetName string) {
+	for i, e := range g.executions {
+		if e.Name == targetName {
+			t := g.executions[i:]
+			g.executions = append(append(g.executions[:i], exec), t...)
+			return
+		}
+	}
+	println("Unable to find " + targetName + " execution in the list.")
+}
+
+func (g *HangmanGame) AddBeforeExecution(exec GameExecution, targetName string) {
+	for i, e := range g.executions {
+		if e.Name == targetName {
+			t := g.executions[i-1:]
+			g.executions = append(append(g.executions[:i-1], exec), t...)
+			return
+		}
+	}
+	println("Unable to find " + targetName + " execution in the list.")
+}
+
 var executionCheckForRemainingTries = GameExecution{string(DefaultExecutionCheckForRemainingTries), func(userInput *string, game *HangmanGame) bool {
 	maxTries, _, _ := game.Config.GetConfigItem(ConfigMaxTries)
 	if game.GetGameTries() >= maxTries {
@@ -58,7 +127,7 @@ var executionCheckForWord = GameExecution{string(DefaultExecutionCheckForWord), 
 var executionCheckForVowel = GameExecution{string(DefaultExecutionCheckForVowel), func(userInput *string, game *HangmanGame) bool {
 	rn := []rune(*userInput)[0]
 	gameMode, _, _ := game.Config.GetConfigItem(ConfigGameMode)
-	if gameMode == HARD && isVowel(rn) && VowelCount(game.GetGameUsed()) >= 3 {
+	if gameMode == int(HARD) && isVowel(rn) && VowelCount(game.GetGameUsed()) >= 3 {
 		AddInformationHeadMessage("You can't use vowel anymore !")
 		game.AddGameTry()
 		executionAddToUsedLetter.Func(userInput, game)
@@ -70,9 +139,9 @@ var executionCheckForVowel = GameExecution{string(DefaultExecutionCheckForVowel)
 var executionCheckLetterIsUsed = GameExecution{string(DefaultExecutionLetterIsUsed), func(userInput *string, game *HangmanGame) bool {
 	rn := []rune(*userInput)[0]
 	gameMode, _, _ := game.Config.GetConfigItem(ConfigGameMode)
-	if HasOccurenceLetter(game.GetGameUsed(), rn) && gameMode != HARD {
+	if HasOccurenceLetter(game.GetGameUsed(), rn) && gameMode != int(HARD) {
 		AddInformationHeadMessage("You already use this letter")
-		if gameMode == HARD {
+		if gameMode == int(HARD) {
 			game.AddGameTry()
 			if isVowel(rn) {
 				game.AddGameTry()
