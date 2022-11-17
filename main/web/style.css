@@ -1,18 +1,39 @@
-body
-{
-    background-color: #ffffff;
+body {
+    display: inline;
 }
-h1
-{
+
+h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: aqua;
-    font-size: 55px;
+    background-color: red;
+    font-size: 60px;
 }
-div
-{
-    position: flex;
-    color: aqua;
-    text-align: center;
+
+.barre {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+}
+
+.gauche {
+    background-color: blue;
+}
+
+.droite {
+    background-color: red;
+}
+
+.gauche,
+.droite {
+    height: 71vh;
+    width: 49%;
+    display: inline-block;
+    max-width: 50vw;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
 }

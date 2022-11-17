@@ -3,21 +3,28 @@
 
 
 <head>
-<meta charset="utf-8">
-<title>Hangman - Team Absenteisme</title>
-<link rel="stylesheet" href="web/style.css">
+  <meta charset="utf-8">
+  <title>Hangman - Team Absenteisme</title>
+  <link rel="stylesheet" href="web/style.css">
 </head>
 
 <body>
-<h1>The Hangman</h1>
-<h1>{{ .GetGameWord }}</h1>
-<p> Number of tries /10: {{ .GetGameTries }}</p>
-<p>Letters already used: {{ .GetGameUsed }}</p>
-<!-- once game is finished(if the number of tries is 0): {{ .GetGameToFind }} -->
+  <h1>The Hangman</h1>
+  <h1>{{ .GetGameWord }}</h1>
+  <!-- once game is finished(if the number of tries is 0): {{ .GetGameToFind }} -->
+  <div class="container">
 
-
-  <form action="/hangman" method="post">
-    <input id="inputBox" name="input" type="text" autofocus="autofocus">
-    <input type="submit" value="Entrer" />
-</form>
+    <div class="gauche">
+      <div class="barre">
+        <form action="/hangman" method="post">
+          <input id="inputBox" name="input" type="text" autofocus="autofocus">
+          <input type="submit" value="Entrer" />
+          <p> Number of tries {{ .GetGameTries }} /10:</p>
+          <p>Letters already used: {{ .GetGameUsed }}</p>
+      </div>
+    </div>
+    <div class="droite">
+    </div>
+  </div>
+  </form>
 </body>
