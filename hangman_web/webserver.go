@@ -18,6 +18,8 @@ type WebGame struct {
 
 func StartServer() {
 	InitWebHandlers()
+	fs := http.FileServer(http.Dir("./web/"))
+	http.Handle("/web/", http.StripPrefix("/web/", fs))
 	http.ListenAndServe(":8080", nil)
 }
 
