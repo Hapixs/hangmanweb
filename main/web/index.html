@@ -8,13 +8,16 @@
   <link rel="stylesheet" href="web/style.css">
 </head>
 
+
+<header>
+  <a href="/logout"> Logout </a>
+</header>
 <body>
   <h1>The Hangman</h1>
   
   <!-- once game is finished(if the number of tries is 0): {{ .GetGameToFind }} -->
   <div class="container">
     <div class="gauche">
-
       {{if eq .IsInGame true}}
       <div class="word">
         <p>{{ .GetGameWord }}</p> 
@@ -25,7 +28,7 @@
         </form>
       </div>
       <div class="tries">
-        <p> Number of tries {{ .GetGameTries }} /10:</p>
+        <p> Nombres d'erreurs {{ .GetGameTries }} /10:</p>
       </div>
       <div class="letterused">
         <p>Letters already used: {{ .GetGameUsed }}</p>

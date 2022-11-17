@@ -34,7 +34,7 @@ func (u *User) SetUpUserCookies(w *http.ResponseWriter) {
 
 func IsLogin(r *http.Request) bool {
 	c, err := r.Cookie("user_id")
-	if err != nil {
+	if err != nil || c.Value == "" {
 		return false
 	}
 	id, _ := strconv.Atoi(c.Value)

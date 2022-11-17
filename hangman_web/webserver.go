@@ -31,6 +31,7 @@ func InitWebHandlers() {
 	http.HandleFunc("/login", LoginPostHandler)
 	http.HandleFunc("/startsologame", StartSoloPageHandler)
 	http.HandleFunc("/nolog", AnnoLoginHandler)
+	http.HandleFunc("/logout", DisconnectHandler)
 }
 
 var wg = sync.WaitGroup{}

@@ -76,6 +76,12 @@ func AnnoLoginHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
+func DisconnectHandler(w http.ResponseWriter, r *http.Request) {
+	c := http.Cookie{Name: "user_id", Value: ""}
+	http.SetCookie(w, &c)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
 func StartSoloPageHandler(w http.ResponseWriter, r *http.Request) {
 	if !IsLogin(r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
