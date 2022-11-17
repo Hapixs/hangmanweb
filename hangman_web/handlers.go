@@ -69,6 +69,13 @@ func LoginPostHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
+func AnnoLoginHandler(w http.ResponseWriter, r *http.Request) {
+	ano := User{isAnnonyme: true, Username: "Annonyme"}
+	ano.GenerateUniqueId()
+	ano.SetUpUserCookies(&w)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
 func StartSoloPageHandler(w http.ResponseWriter, r *http.Request) {
 	if !IsLogin(r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)

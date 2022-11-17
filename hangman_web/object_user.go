@@ -9,10 +9,11 @@ import (
 )
 
 type User struct {
-	Username string
-	Points   int
-	UniqueId int
-	Password string
+	Username   string
+	Points     int
+	UniqueId   int
+	Password   string
+	isAnnonyme bool
 }
 
 var usermap = map[int](*User){}

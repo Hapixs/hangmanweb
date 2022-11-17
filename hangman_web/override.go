@@ -39,6 +39,7 @@ var overridedExecutionCheckForWordDiscover = hangman_classic.GameExecution{Name:
 	Game := getWebGameFromId(game.PublicId)
 	if !hangman_classic.HasOccurenceLetter(game.GetGameWord(), '_') {
 		Game.IsWin = true
+		Game.User.Points += 1
 		return true
 	}
 	return false
