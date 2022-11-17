@@ -5,6 +5,7 @@ import (
 	"hangman_classic"
 	"net/http"
 	"os"
+	"sync"
 )
 
 var sessions = map[string](*WebGame){}
@@ -14,6 +15,7 @@ type WebGame struct {
 	Input   bytes.Buffer
 	IsWin   bool
 	IsLoose bool
+	User    *User
 	PoolId  string
 }
 
@@ -28,15 +30,29 @@ func InitWebHandlers() {
 	http.HandleFunc("/hangman", PostHandler)
 	http.HandleFunc("/", GetHandler)
 	http.HandleFunc("/reset", ResetHandler)
+	http.HandleFunc("/login", PostLogin)
 }
 
+var mutex = &sync.Mutex{}
+
 func getGameFromCookies(w http.ResponseWriter, r *http.Request) *WebGame {
+	if !IsLogin(r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
 	c, err := r.Cookie("sessionid")
 	sessionid := ""
-	if err != nil || sessions[c.Value] == nil {
+	if err != nil || sessions[c.Value] == nil || sessions[c.Value].User == nil {
 		Game := &hangman_classic.HangmanGame{}
 		prepareGameForWeb(Game)
-		sessions[Game.PublicId] = &WebGame{Game, bytes.Buffer{}, false, false, ""}
+		user, err := GetUserFromRequest(r)
+		if err != nil {
+			user = &User{Username: "Unknown"}
+			user.GenerateUniqueId()
+			user.SetUpUserCookies(&w)
+		}
+		mutex.Lock()
+		sessions[Game.PublicId] = &WebGame{Game, bytes.Buffer{}, false, false, user, ""}
+		mutex.Unlock()
 		http.SetCookie(w, &http.Cookie{Name: "sessionid", Value: Game.PublicId})
 		defer Game.StartGame()
 		sessionid = Game.PublicId
@@ -48,7 +64,10 @@ func getGameFromCookies(w http.ResponseWriter, r *http.Request) *WebGame {
 }
 
 func getWebGameFromId(id string) *WebGame {
-	return sessions[id]
+	mutex.Lock()
+	s := sessions[id]
+	mutex.Unlock()
+	return s
 }
 
 func prepareGameForWeb(Game *hangman_classic.HangmanGame) {
@@ -67,11 +86,6 @@ func prepareGameForWeb(Game *hangman_classic.HangmanGame) {
 // jvais dormir et demain jte le code
 // tqt on est la
 // :*
-type User struct {
-	Username string
-	Points   int
-}
-
 type Pool struct {
 	PublicId string
 	Users    []User

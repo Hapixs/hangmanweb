@@ -21,7 +21,13 @@ var overridedExecutionWaitForInput = hangman_classic.GameExecution{Name: string(
 }}
 
 var overridedExecutionCheckForRemainingTries = hangman_classic.GameExecution{Name: string(hangman_classic.DefaultExecutionCheckForRemainingTries), Func: func(userInput *string, game *hangman_classic.HangmanGame) bool {
+	if game == nil {
+		return true
+	}
 	Game := getWebGameFromId(game.PublicId)
+	if Game == nil {
+		return true
+	}
 	if game.GetGameTries() >= 10 {
 		Game.IsLoose = true
 		return true
