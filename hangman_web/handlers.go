@@ -1,6 +1,7 @@
 package hangmanweb
 
 import (
+	"hangman_classic"
 	"net/http"
 	"text/template"
 	"time"
@@ -14,7 +15,14 @@ type HtmlData struct {
 	GetUserName   string
 }
 
-func PostHandler(w http.ResponseWriter, r *http.Request) {
+const (
+	templatePathIndex = "web/index.html"
+	templatePathWin   = "web/win.html"
+	templatePathLoose = "web/loose.html"
+	templatePathLogin = "web/login.html"
+)
+
+func HangmanPostHandler(w http.ResponseWriter, r *http.Request) {
 	Game := getGameFromCookies(w, r)
 	switch r.Method {
 	case "POST":
@@ -27,7 +35,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
-func PostLogin(w http.ResponseWriter, r *http.Request) {
+func LoginPostHandler(w http.ResponseWriter, r *http.Request) {
 	if !IsLogin(r) {
 		switch r.Method {
 		case "POST":
@@ -36,7 +44,21 @@ func PostLogin(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
-		user := &User{Username: r.Form.Get("username")}
+
+		encodedPass := string(hangman_classic.GetEncodedStringInSha256(r.Form.Get("password")))
+
+		for _, v := range usermap {
+			if v.Username == r.Form.Get("username") {
+				if v.Password == encodedPass {
+					v.SetUpUserCookies(&w)
+					return
+				}
+				// TODO: send error
+				return
+			}
+		}
+
+		user := &User{Username: r.Form.Get("username"), Password: encodedPass}
 		println(r.Form.Get("username"))
 		user.GenerateUniqueId()
 		user.SetUpUserCookies(&w)
@@ -45,31 +67,29 @@ func PostLogin(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
-func GetHandler(w http.ResponseWriter, r *http.Request) {
+func IndexHandler(w http.ResponseWriter, r *http.Request) {
+	var data HtmlData
+	var tp *template.Template
 	if !IsLogin(r) {
-		tp := template.Must(template.ParseFiles("web/login.html"))
-		tp.Execute(w, nil)
-		return
-	}
-	Game := getGameFromCookies(w, r)
-	if Game.IsWin {
-		tp := template.Must(template.ParseFiles("web/win.html"))
-		tp.Execute(w, nil)
-	} else if Game.IsLoose {
-		tp := template.Must(template.ParseFiles("web/loose.html"))
-		tp.Execute(w, nil)
+		tp = template.Must(template.ParseFiles(templatePathLogin))
 	} else {
-		tp := template.Must(template.ParseFiles("web/index.html"))
-
-		data := HtmlData{
-			GetGameTries:  Game.Game.GetGameTries(),
-			GetGameUsed:   Game.Game.GetGameUsed(),
-			GetGameWord:   Game.Game.GetGameWord(),
-			GetGameToFind: Game.Game.GetGameToFind(),
-			GetUserName:   Game.User.Username,
+		Game := getGameFromCookies(w, r)
+		if Game.IsWin {
+			tp = template.Must(template.ParseFiles(templatePathWin))
+		} else if Game.IsLoose {
+			tp = template.Must(template.ParseFiles(templatePathLoose))
+		} else {
+			tp = template.Must(template.ParseFiles(templatePathIndex))
+			data = HtmlData{
+				GetGameTries:  Game.Game.GetGameTries(),
+				GetGameUsed:   Game.Game.GetGameUsed(),
+				GetGameWord:   Game.Game.GetGameWord(),
+				GetGameToFind: Game.Game.GetGameToFind(),
+				GetUserName:   Game.User.Username,
+			}
 		}
-		tp.Execute(w, data)
 	}
+	tp.Execute(w, data)
 }
 
 func ResetHandler(w http.ResponseWriter, r *http.Request) {

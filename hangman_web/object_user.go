@@ -12,6 +12,7 @@ type User struct {
 	Username string
 	Points   int
 	UniqueId int
+	Password string
 }
 
 var usermap = map[int](*User){}

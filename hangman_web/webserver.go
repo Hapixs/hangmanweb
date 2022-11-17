@@ -1,94 +1,93 @@
 package hangmanweb
 
 import (
-	"bytes"
-	"hangman_classic"
+	"encoding/csv"
+	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"sync"
+	"time"
 )
 
 var sessions = map[string](*WebGame){}
-
-type WebGame struct {
-	Game    *hangman_classic.HangmanGame
-	Input   bytes.Buffer
-	IsWin   bool
-	IsLoose bool
-	User    *User
-	PoolId  string
-}
 
 func StartServer() {
 	InitWebHandlers()
 	fs := http.FileServer(http.Dir("./web/"))
 	http.Handle("/web/", http.StripPrefix("/web/", fs))
+
+	wg.Add(1)
+	go AutoSaveWorker(&wg)
+	go LoadUserCSV()
+
 	http.ListenAndServe(":8080", nil)
 }
 
 func InitWebHandlers() {
-	http.HandleFunc("/hangman", PostHandler)
-	http.HandleFunc("/", GetHandler)
+	http.HandleFunc("/hangman", HangmanPostHandler)
+	http.HandleFunc("/", IndexHandler)
 	http.HandleFunc("/reset", ResetHandler)
-	http.HandleFunc("/login", PostLogin)
+	http.HandleFunc("/login", LoginPostHandler)
 }
 
-var mutex = &sync.Mutex{}
+var wg = sync.WaitGroup{}
 
-func getGameFromCookies(w http.ResponseWriter, r *http.Request) *WebGame {
-	if !IsLogin(r) {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+func AutoSaveWorker(wg *sync.WaitGroup) {
+	defer wg.Done()
+	for {
+		time.Sleep(time.Second * 10)
+		println("Saving user data ...")
+		SaveUserCSV()
 	}
-	c, err := r.Cookie("sessionid")
-	sessionid := ""
-	if err != nil || sessions[c.Value] == nil || sessions[c.Value].User == nil {
-		Game := &hangman_classic.HangmanGame{}
-		prepareGameForWeb(Game)
-		user, err := GetUserFromRequest(r)
-		if err != nil {
-			user = &User{Username: "Unknown"}
-			user.GenerateUniqueId()
-			user.SetUpUserCookies(&w)
-		}
-		mutex.Lock()
-		sessions[Game.PublicId] = &WebGame{Game, bytes.Buffer{}, false, false, user, ""}
-		mutex.Unlock()
-		http.SetCookie(w, &http.Cookie{Name: "sessionid", Value: Game.PublicId})
-		defer Game.StartGame()
-		sessionid = Game.PublicId
-	} else {
-		sessionid = c.Value
+}
+
+func LoadUserCSV() {
+
+	f, err := os.Open("users.csv")
+
+	if err != nil {
+		println("No users.csv found.")
+		return
 	}
 
-	return sessions[sessionid]
+	r := csv.NewReader(f)
+	records, err := r.ReadAll()
+
+	if err != nil {
+		println("CSV READ FAILED !")
+		return
+	}
+
+	for i := 1; i < len(records); i++ {
+		userId, _ := strconv.Atoi(records[i][2])
+		userPoint, _ := strconv.Atoi(records[i][1])
+		usermap[userId] = &User{records[i][0], userPoint, userId, records[i][3]}
+	}
+
+	println("Loaded " + strconv.Itoa(len(usermap)) + " users from csv")
 }
 
-func getWebGameFromId(id string) *WebGame {
-	mutex.Lock()
-	s := sessions[id]
-	mutex.Unlock()
-	return s
-}
+func SaveUserCSV() {
+	records := [][]string{
+		{"username", "points", "uniqueid", "password"},
+	}
+	for _, v := range usermap {
+		records = append(records, []string{v.Username, strconv.Itoa(v.Points), strconv.Itoa(v.UniqueId), v.Password})
+	}
 
-func prepareGameForWeb(Game *hangman_classic.HangmanGame) {
-	os.Args = append(os.Args, "words.txt")
-	Game.InitGame()
-	Game.ReplaceExecution(overridedExecutionWaitForInput, string(hangman_classic.DefaultExecutionWaitForInput))
-	Game.ReplaceExecution(overridedExecutionCheckForRemainingTries, string(hangman_classic.DefaultExecutionCheckForRemainingTries))
-	Game.ReplaceExecution(overridedExecutionCheckForWordDiscover, string(hangman_classic.DefaultExecutionCheckForWordDiscover))
-	Game.ReplaceExecution(overridedExecutionCheckForWord, string(hangman_classic.DefaultExecutionCheckForWord))
-	Game.Config.SetConfigItemValue(hangman_classic.ConfigMultipleWorkers, true)
-	Game.RemoveExecution(hangman_classic.DefaultExecutionDisplayBody)
-	println("Prepared " + Game.PublicId)
-}
+	f, err := os.Create("users.csv")
 
-// Hmm Un multijoueur ?
-// jvais dormir et demain jte le code
-// tqt on est la
-// :*
-type Pool struct {
-	PublicId string
-	Users    []User
-}
+	if err != nil {
+		log.Fatalln("failed to open file", err)
+	}
 
-var PoolMap = map[string](Pool){}
+	w := csv.NewWriter(f)
+
+	if err := w.WriteAll(records); err != nil {
+		log.Fatalln("error writing record to file", err)
+	}
+	f.Close()
+	w.Flush()
+	println("User data saved !")
+}
