@@ -50,13 +50,13 @@ h1 {
 .tries {
     display: flex;
     justify-content: center;
-    font-family: "Kimberley", monospace
+    font-family: "Kimberley", monospace;
 }
 
 .letterused {
     display: flex;
     justify-content: center;
-    font-family: "Kimberley", monospace
+    font-family: "Kimberley", monospace;
 }
 
 @font-face {
@@ -85,7 +85,6 @@ h1 {
 }
 
 #password {
-
     border-style: solid;
     border-color: black;
     border-radius: 5rem;
@@ -111,3 +110,12 @@ h1 {
 .nolog {
     background-color: black;
 }
+
+.compte {
+    display: flex;
+    justify-content: center;
+    font-family: "Kimberley", monospace;
+    margin-top: 20px;
+}
+
+.form 
