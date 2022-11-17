@@ -7,7 +7,7 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 80px;
+    font-size: 60px;
     font-family: "Kimberley", monospace
 }
 .word
@@ -23,8 +23,8 @@ h1 {
     align-items: center;
     font-size: 60px;
 }
-
-.gauche {
+.gauche 
+{
     background-color: blue;
     font-size: 25px;
 }
@@ -60,4 +60,13 @@ h1 {
 @font-face {
     font-family: "Kimberley";
     src: url(http://www.princexml.com/fonts/larabie/kimberle.ttf) format("truetype");
+}
+#inputBox
+{
+    border-style: solid;
+    border-color: black;
+    border-radius: 5%;
+    width: 150px;
+    height: 20px;
+    margin-bottom: 15px;
 }
