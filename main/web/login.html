@@ -2,15 +2,23 @@
 
 <html>
 <head>
-    <title> zizi en feu </title>
+    <title> Login-Hangman </title>
+    <link rel="stylesheet" href="web/style.css">
 </head>
 
 <body>
     <h1> Login </h1>
-    <div class="barre">
-        <form action="/login" method="post">
-          <input id="username" name="username" type="text" autofocus="autofocus" autocomplete="off">
-          <input type="submit" value="Entrer" />
-      </div>
+    <div class="containers">
+        <div class="login">
+            <div class="barre">
+                <form action="/login" method="post">
+                    <input id="username" name="username" type="text" autofocus="autofocus" autocomplete="off">
+                    <input id="password" name="password" type="password" autofocus="autofocus" autocomplete="off">
+                </form>
+            </div>
+        </div>
+        <div class="nolog">
+        </div>
+    </div>
 </body>
 </html>
