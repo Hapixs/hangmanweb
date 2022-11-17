@@ -13,6 +13,7 @@ type HtmlData struct {
 	GetGameWord   string
 	GetGameToFind string
 	GetUserName   string
+	IsInGame      bool
 }
 
 const (
@@ -51,9 +52,10 @@ func LoginPostHandler(w http.ResponseWriter, r *http.Request) {
 			if v.Username == r.Form.Get("username") {
 				if v.Password == encodedPass {
 					v.SetUpUserCookies(&w)
+					http.Redirect(w, r, "/", http.StatusSeeOther)
 					return
 				}
-				// TODO: send error
+				http.Redirect(w, r, "/", http.StatusSeeOther)
 				return
 			}
 		}
@@ -86,6 +88,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 				GetGameWord:   Game.Game.GetGameWord(),
 				GetGameToFind: Game.Game.GetGameToFind(),
 				GetUserName:   Game.User.Username,
+				IsInGame:      true,
 			}
 		}
 	}
