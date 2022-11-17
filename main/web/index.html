@@ -10,21 +10,31 @@
 
 <body>
   <h1>The Hangman</h1>
-  <h1>{{ .GetGameWord }}</h1>
+  
   <!-- once game is finished(if the number of tries is 0): {{ .GetGameToFind }} -->
   <div class="container">
 
     <div class="gauche">
+      <div class="word">
+        <p>{{ .GetGameWord }}</p>
+      </div>
       <div class="barre">
         <form action="/hangman" method="post">
           <input id="inputBox" name="input" type="text" autofocus="autofocus">
           <input type="submit" value="Entrer" />
-          <p> Number of tries {{ .GetGameTries }} /10:</p>
-          <p>Letters already used: {{ .GetGameUsed }}</p>
+        </form>
       </div>
+      <div class="tries">
+        <p> Number of tries {{ .GetGameTries }} /10:</p>
+      </div>
+      <div class="letterused">
+        <p>Letters already used: {{ .GetGameUsed }}</p>
+      </div>
+
+      
     </div>
     <div class="droite">
     </div>
   </div>
-  </form>
+
 </body>

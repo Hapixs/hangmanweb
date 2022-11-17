@@ -1,15 +1,22 @@
 body {
     display: inline;
+    background-color: #3B6489;
 }
 
 h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: red;
-    font-size: 60px;
+    font-size: 80px;
+    font-family: "Kimberley", monospace
 }
-
+.word
+{
+    display: flex;
+    justify-content: center;
+    font-size: 60px;
+    font-family: "Kimberley", monospace
+}
 .barre {
     display: flex;
     justify-content: center;
@@ -19,6 +26,7 @@ h1 {
 
 .gauche {
     background-color: blue;
+    font-size: 25px;
 }
 
 .droite {
@@ -36,4 +44,20 @@ h1 {
 .container {
     display: flex;
     justify-content: center;
+}
+.tries
+{
+    display: flex;
+    justify-content: center;
+    font-family: "Kimberley", monospace
+}
+.letterused
+{
+    display: flex;
+    justify-content: center;
+    font-family: "Kimberley", monospace
+}
+@font-face {
+    font-family: "Kimberley";
+    src: url(http://www.princexml.com/fonts/larabie/kimberle.ttf) format("truetype");
 }
