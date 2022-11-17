@@ -69,6 +69,15 @@ func LoginPostHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
+func StartSoloPageHandler(w http.ResponseWriter, r *http.Request) {
+	if !IsLogin(r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	StartNewGame(&w, r)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	var data HtmlData
 	var tp *template.Template
@@ -76,7 +85,13 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 		tp = template.Must(template.ParseFiles(templatePathLogin))
 	} else {
 		Game := getGameFromCookies(w, r)
-		if Game.IsWin {
+		if Game.Game == nil {
+			tp = template.Must(template.ParseFiles(templatePathIndex))
+			data = HtmlData{
+				GetUserName: Game.User.Username,
+				IsInGame:    false,
+			}
+		} else if Game.IsWin {
 			tp = template.Must(template.ParseFiles(templatePathWin))
 		} else if Game.IsLoose {
 			tp = template.Must(template.ParseFiles(templatePathLoose))

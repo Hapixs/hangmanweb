@@ -23,28 +23,32 @@ func getGameFromCookies(w http.ResponseWriter, r *http.Request) *WebGame {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
 
+	user, _ := GetUserFromRequest(r)
 	c, err := r.Cookie("sessionid")
 	sessionid := ""
 	if err != nil || sessions[c.Value] == nil || sessions[c.Value].User == nil {
-		Game := &hangman_classic.HangmanGame{}
-		prepareGameForWeb(Game)
-		user, err := GetUserFromRequest(r)
-		if err != nil {
-			user = &User{Username: "Unknown"}
-			user.GenerateUniqueId()
-			user.SetUpUserCookies(&w)
-		}
-		mutex.Lock()
-		sessions[Game.PublicId] = &WebGame{Game, bytes.Buffer{}, false, false, user}
-		mutex.Unlock()
-		http.SetCookie(w, &http.Cookie{Name: "sessionid", Value: Game.PublicId})
-		defer Game.StartGame()
-		sessionid = Game.PublicId
+		return &WebGame{nil, bytes.Buffer{}, false, false, user}
 	} else {
 		sessionid = c.Value
 	}
 
 	return sessions[sessionid]
+}
+
+func StartNewGame(w *http.ResponseWriter, r *http.Request) {
+	Game := &hangman_classic.HangmanGame{}
+	prepareGameForWeb(Game)
+	user, err := GetUserFromRequest(r)
+	if err != nil {
+		user = &User{Username: "Unknown"}
+		user.GenerateUniqueId()
+		user.SetUpUserCookies(w)
+	}
+	mutex.Lock()
+	sessions[Game.PublicId] = &WebGame{Game, bytes.Buffer{}, false, false, user}
+	mutex.Unlock()
+	http.SetCookie(*w, &http.Cookie{Name: "sessionid", Value: Game.PublicId})
+	defer Game.StartGame()
 }
 
 func getWebGameFromId(id string) *WebGame {
