@@ -25,6 +25,7 @@ func (u *User) GenerateUniqueId() {
 
 func (u *User) SetUpUserCookies(w *http.ResponseWriter) {
 	c := http.Cookie{Name: "user_id", Value: strconv.Itoa(u.UniqueId)}
+	c.Expires.After(time.Now().Add(time.Hour))
 	http.SetCookie(*w, &c)
 	mutex.Lock()
 	usermap[u.UniqueId] = u
