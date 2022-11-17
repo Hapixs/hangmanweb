@@ -13,14 +13,13 @@
             <div class="compte">connecte toi !</div>
             <div class="barre">
                 
-                <form action="/login" method="post">
-                    <br>
+                <form id="formuser" action="/login" method="post"> 
                     <label id="name" for="username">username</label>
                     <input id="username" name="username" type="text" autofocus="autofocus" autocomplete="off">
-                    <br>
+                    <label id="psw" for="password">password</label>
                     <input id="password" name="password" type="password" autofocus="autofocus" autocomplete="off">
-                    <br>
-                    <input type="submit" value="Connexion" />
+                    
+                    <input id="submit" type="submit" value="Connexion" />
                 </form>
             </div>
         </div>

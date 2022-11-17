@@ -119,5 +119,27 @@ h1 {
 }
 
 #name {
-    font-size: 30px;
+    font-size: 20px;
+    font-family: "Kimberley", monospace;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#psw {
+    font-family: "Kimberley", monospace;
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px
+}
+
+#submit {
+    display: flex;
+    justify-content: center;
+    border-radius: 5rem;
+}
+
+#formuser {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
