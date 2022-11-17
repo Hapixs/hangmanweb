@@ -12,17 +12,22 @@
         <div class="login">
             <div class="compte">connecte toi !</div>
             <div class="barre">
+                
                 <form action="/login" method="post">
+                    <br>
+                    <label id="name" for="username">username</label>
                     <input id="username" name="username" type="text" autofocus="autofocus" autocomplete="off">
                     <br>
                     <input id="password" name="password" type="password" autofocus="autofocus" autocomplete="off">
                     <br>
-                    
                     <input type="submit" value="Connexion" />
                 </form>
             </div>
         </div>
         <div class="nolog">
+            <form action="/nolog" method="get">
+                <input type="submit" value="test" />
+            </form>
         </div>
     </div>
 </body>

@@ -118,4 +118,6 @@ h1 {
     margin-top: 20px;
 }
 
-.form 
+#name {
+    font-size: 30px;
+}
