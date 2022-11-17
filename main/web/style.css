@@ -108,7 +108,7 @@ h1 {
 }
 
 .nolog {
-    background-color: black;
+    background-color: blue;
 }
 
 .compte {
@@ -135,6 +135,10 @@ h1 {
     display: flex;
     justify-content: center;
     border-radius: 5rem;
+    width: 100px;
+    height: 40px;
+    margin-top: 15px;
+    font-family: "Kimberley", monospace;
 }
 
 #formuser {
@@ -144,3 +148,27 @@ h1 {
     flex-direction: column;
 }
 
+.invite {
+    display: flex;
+    justify-content: center;
+    font-family: "Kimberley", monospace;
+    margin-top: 20px;
+    font-size: 25px;
+}
+
+#randomeuser {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; 
+}
+
+#withoutnamesubmit {
+    display: flex;
+    justify-content: center;
+    border-radius: 5rem;
+    width: 100px;
+    height: 40px;
+    font-family: "Kimberley", monospace;
+    margin-top: 237px;
+}
