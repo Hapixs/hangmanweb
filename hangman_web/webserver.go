@@ -14,6 +14,7 @@ type WebGame struct {
 	Input   bytes.Buffer
 	IsWin   bool
 	IsLoose bool
+	PoolId  string
 }
 
 func StartServer() {
@@ -32,11 +33,10 @@ func InitWebHandlers() {
 func getGameFromCookies(w http.ResponseWriter, r *http.Request) *WebGame {
 	c, err := r.Cookie("sessionid")
 	sessionid := ""
-
 	if err != nil || sessions[c.Value] == nil {
 		Game := &hangman_classic.HangmanGame{}
 		prepareGameForWeb(Game)
-		sessions[Game.PublicId] = &WebGame{Game, bytes.Buffer{}, false, false}
+		sessions[Game.PublicId] = &WebGame{Game, bytes.Buffer{}, false, false, ""}
 		http.SetCookie(w, &http.Cookie{Name: "sessionid", Value: Game.PublicId})
 		defer Game.StartGame()
 		sessionid = Game.PublicId
@@ -62,3 +62,19 @@ func prepareGameForWeb(Game *hangman_classic.HangmanGame) {
 	Game.RemoveExecution(hangman_classic.DefaultExecutionDisplayBody)
 	println("Prepared " + Game.PublicId)
 }
+
+// Hmm Un multijoueur ?
+// jvais dormir et demain jte le code
+// tqt on est la
+// :*
+type User struct {
+	Username string
+	Points   int
+}
+
+type Pool struct {
+	PublicId string
+	Users    []User
+}
+
+var PoolMap = map[string](Pool){}
