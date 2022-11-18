@@ -100,7 +100,6 @@ func RestartSoloGameHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	Game := getGameFromCookies(w, r)
-	Game.Game.Kill()
 	if Game != nil && Game.Game != nil {
 		mutex.Lock()
 		sessions[Game.Game.PublicId] = nil
