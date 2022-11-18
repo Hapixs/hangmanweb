@@ -5,6 +5,9 @@ import (
 	"strconv"
 )
 
+// HERE IT IS ! THE MULTIPLAYER
+// Not available for today
+
 type GamePool struct {
 	UniqueID int
 	Games    []*WebGame
