@@ -279,10 +279,11 @@ header {
 }
 
 .statistics {
-    margin-top: 100px;
+    margin-top: 70px;
     display: flex;
     justify-content: center;
     font-family: "Kimberley", monospace;
+    font-size: 20px;
 }
 
 #formscore {
