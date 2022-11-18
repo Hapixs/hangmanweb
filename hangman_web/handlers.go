@@ -4,7 +4,6 @@ import (
 	"hangman_classic"
 	"net/http"
 	"text/template"
-	"time"
 )
 
 type HtmlData struct {
@@ -21,6 +20,7 @@ const (
 	templatePathWin   = "web/win.html"
 	templatePathLoose = "web/loose.html"
 	templatePathLogin = "web/login.html"
+	templateStats     = "web/statistics.html"
 )
 
 func HangmanPostHandler(w http.ResponseWriter, r *http.Request) {
@@ -92,6 +92,21 @@ func StartSoloPageHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
+func RestartSoloGameHandler(w http.ResponseWriter, r *http.Request) {
+	if !IsLogin(r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	Game := getGameFromCookies(w, r)
+	Game.Game.Kill()
+	mutex.Lock()
+	sessions[Game.Game.PublicId] = nil
+	mutex.Unlock()
+	gameMode := r.Form.Get("difficulty")
+	StartNewGame(&w, r, gameMode)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	var data HtmlData
 	var tp *template.Template
@@ -107,8 +122,12 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		} else if Game.IsWin {
 			tp = template.Must(template.ParseFiles(templatePathWin))
+			Game.User.Wins++
+			Game.User.WordsFind++
+			Game.User.Points++
 		} else if Game.IsLoose {
 			tp = template.Must(template.ParseFiles(templatePathLoose))
+			Game.User.Loose++
 		} else {
 			tp = template.Must(template.ParseFiles(templatePathIndex))
 			data = HtmlData{
@@ -130,6 +149,33 @@ func ResetHandler(w http.ResponseWriter, r *http.Request) {
 	mutex.Lock()
 	sessions[Game.Game.PublicId] = nil
 	mutex.Unlock()
-	time.Sleep(time.Second / 2)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+type StatsHtmlData struct {
+	Username string
+	Wins     int
+	Loose    int
+	Letters  int
+	Words    int
+}
+
+func StatisticsHandler(w http.ResponseWriter, r *http.Request) {
+	if !IsLogin(r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	user, _ := GetUserFromRequest(r)
+	tp := template.Must(template.ParseFiles(templateStats))
+
+	data := StatsHtmlData{
+		Username: user.Username,
+		Wins:     user.Wins,
+		Loose:    user.Loose,
+		Letters:  user.LetterFind,
+		Words:    user.WordsFind,
+	}
+
+	tp.Execute(w, data)
 }

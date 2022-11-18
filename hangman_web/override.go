@@ -30,7 +30,6 @@ var overridedExecutionCheckForRemainingTries = hangman_classic.GameExecution{Nam
 	}
 	if game.GetGameTries() >= 10 {
 		Game.IsLoose = true
-		Game.User.Loose++
 		return true
 	}
 	return false
@@ -40,8 +39,6 @@ var overridedExecutionCheckForWordDiscover = hangman_classic.GameExecution{Name:
 	Game := getWebGameFromId(game.PublicId)
 	if !hangman_classic.HasOccurenceLetter(game.GetGameWord(), '_') {
 		Game.IsWin = true
-		Game.User.Points += 1
-		Game.User.Wins++
 		return true
 	}
 	return false
@@ -52,9 +49,6 @@ var overridedExecutionCheckForWord = hangman_classic.GameExecution{Name: string(
 	if len(*userInput) > 1 {
 		if game.GetGameToFind() == *userInput {
 			Game.IsWin = true
-			Game.User.Wins++
-			Game.User.Points++
-			Game.User.WordsFind++
 			return true
 		}
 		game.AddGameTry()

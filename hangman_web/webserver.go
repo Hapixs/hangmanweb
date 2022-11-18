@@ -32,6 +32,8 @@ func InitWebHandlers() {
 	http.HandleFunc("/startsologame", StartSoloPageHandler)
 	http.HandleFunc("/nolog", AnnoLoginHandler)
 	http.HandleFunc("/logout", DisconnectHandler)
+	http.HandleFunc("/restartsologame", RestartSoloGameHandler)
+	http.HandleFunc("/statistics", StatisticsHandler)
 }
 
 var wg = sync.WaitGroup{}
@@ -69,7 +71,8 @@ func LoadUserCSV() {
 		Played, _ := strconv.Atoi(records[i][6])
 		LetterFind, _ := strconv.Atoi(records[i][7])
 		WordsFind, _ := strconv.Atoi(records[i][8])
-		usermap[userId] = &User{records[i][0], userPoint, userId, records[i][3], false, userWins, userLoose, Played, LetterFind, WordsFind}
+		println("looses " + records[i][5])
+		usermap[userId] = &User{Username: records[i][0], Points: userPoint, UniqueId: userId, Password: records[i][3], isAnnonyme: false, Wins: userWins, Loose: userLoose, Played: Played, LetterFind: LetterFind, WordsFind: WordsFind}
 	}
 
 	println("Loaded " + strconv.Itoa(len(usermap)) + " users from csv")
