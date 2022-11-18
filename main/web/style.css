@@ -246,3 +246,26 @@ header {
     display:flex;
     flex-direction:row;
 }
+
+#formmainpage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#mainpage {
+    border-radius: 5rem;
+    width: 80px;
+    height: 30px;
+    font-family: "Kimberley", monospace;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.statistics {
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    font-family: "Kimberley", monospace;
+}

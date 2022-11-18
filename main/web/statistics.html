@@ -1,22 +1,35 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="fr">
 
 
 <head>
-    
+  <meta charset="utf-8">
+  <title>Hangman - Team Absenteisme</title>
+  <link rel="stylesheet" href="web/style.css">
 </head>
 
+<header>
+    <form id="formmainpage" action="/" method="get">
+        <input id="mainpage" type="submit" value="main page" />
+    </form>
+</header>
+
+
 <body>
-    <p> Logged as {{ .Username }} </p>
+    <div class="statistics">
+    Logged as {{ .Username }}
+    <br>
     <p> Game played {{ .Played }}
-    <p> Win amount {{ .Wins }} </p>
-    <p> Loose amount {{ .Loose }} </p>
-    <p> Letter found {{ .Letters }} </p>
-    <p> Words found {{ .Words }} </p>
+    Win amount {{ .Wins }}
+    <br>
+    Loose amount {{ .Loose }}
+    <br> 
+    Letter found {{ .Letters }} 
+    <br>
+    Words found {{ .Words }} 
     <p> Win ratio {{ .WinRatio}} </p>
     <p> Loose ratio {{ .LooseRatio }}</p>
-    <a href="/"> Main page </a>
+    </div>
 </body>
 
 </html>
