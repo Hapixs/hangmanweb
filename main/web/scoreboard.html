@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 
+
 <html>
     <head>
     </head>
-
+    <header>
+        <form id="formlogoutstat" action="/logout" method="get">
+          <input id="logoutstatistics" type="submit" value="logout" />
+        </form>
+        <form id="formlogoutstat" action="/statistics" method="get">
+          <input id="logoutstatistics" type="submit" value="statistics" />
+        </form>
+        <form id="formlogoutstat" action="/scoreboard" method="get">
+            <input id="logoutstatistics" type="submit" value="scoreboard" />
+        </form>
+      </header>
     <body>
         <div>
             <form action="/scoreboard" method="post">

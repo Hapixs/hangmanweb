@@ -14,6 +14,7 @@ type HtmlData struct {
 	GetGameToFind string
 	GetUserName   string
 	IsInGame      bool
+	GameMode      string
 }
 
 const (
@@ -88,7 +89,7 @@ func StartSoloPageHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-	gameMode := r.Form.Get("difficulty")
+	gameMode := r.FormValue("difficulty")
 	StartNewGame(&w, r, gameMode)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
@@ -100,10 +101,12 @@ func RestartSoloGameHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	Game := getGameFromCookies(w, r)
 	Game.Game.Kill()
-	mutex.Lock()
-	sessions[Game.Game.PublicId] = nil
-	mutex.Unlock()
-	gameMode := r.Form.Get("difficulty")
+	if Game != nil && Game.Game != nil {
+		mutex.Lock()
+		sessions[Game.Game.PublicId] = nil
+		mutex.Unlock()
+	}
+	gameMode := r.FormValue("difficulty")
 	StartNewGame(&w, r, gameMode)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
@@ -126,9 +129,18 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 			Game.User.Wins++
 			Game.User.WordsFind++
 			Game.User.Points++
+			Game.User.Played++
+			data = HtmlData{
+				GameMode: Game.Gamemode,
+			}
 		} else if Game.IsLoose {
 			tp = template.Must(template.ParseFiles(templatePathLoose))
 			Game.User.Loose++
+			Game.User.Played++
+			println(Game.Gamemode)
+			data = HtmlData{
+				GameMode: Game.Gamemode,
+			}
 		} else {
 			tp = template.Must(template.ParseFiles(templatePathIndex))
 			data = HtmlData{
@@ -154,11 +166,14 @@ func ResetHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 type StatsHtmlData struct {
-	Username string
-	Wins     int
-	Loose    int
-	Letters  int
-	Words    int
+	Username   string
+	Played     int
+	Wins       int
+	Loose      int
+	Letters    int
+	Words      int
+	WinRatio   float32
+	LooseRatio float32
 }
 
 func StatisticsHandler(w http.ResponseWriter, r *http.Request) {
@@ -171,11 +186,14 @@ func StatisticsHandler(w http.ResponseWriter, r *http.Request) {
 	tp := template.Must(template.ParseFiles(templateStats))
 
 	data := StatsHtmlData{
-		Username: user.Username,
-		Wins:     user.Wins,
-		Loose:    user.Loose,
-		Letters:  user.LetterFind,
-		Words:    user.WordsFind,
+		Username:   user.Username,
+		Played:     user.Played,
+		Wins:       user.Wins,
+		Loose:      user.Loose,
+		Letters:    user.LetterFind,
+		Words:      user.WordsFind,
+		WinRatio:   user.GetWinRatio(),
+		LooseRatio: user.GetLooseRatio(),
 	}
 
 	tp.Execute(w, data)
@@ -200,6 +218,7 @@ func ScoreboardHandler(w http.ResponseWriter, r *http.Request) {
 	sbd := ScoreboardHtmlData{}
 	sbd.SB_NAME = sb.Name
 	sbd.SB_TYPE = sbt
+
 	for i, v := range sb.Top {
 		switch sbt {
 		case ScoreboardType_Letter:

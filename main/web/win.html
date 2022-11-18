@@ -7,7 +7,17 @@
     <title> YOU WIN ! </title>
     <link rel="stylesheet" href="web/style.css">
 </head>
-
+<header>
+    <form id="formlogoutstat" action="/logout" method="get">
+      <input id="logoutstatistics" type="submit" value="logout" />
+    </form>
+    <form id="formlogoutstat" action="/statistics" method="get">
+      <input id="logoutstatistics" type="submit" value="statistics" />
+    </form>
+    <form id="formlogoutstat" action="/scoreboard" method="get">
+        <input id="logoutstatistics" type="submit" value="scoreboard" />
+    </form>
+  </header>
 
 <body>
     <h1> You win ! </h1>
@@ -15,10 +25,10 @@
     <form id="restartgame" action="/restartsologame" method="post">
         <input id="restartbouton" type="submit" value="restart" />
         <select name="difficulty" id="difficulty">
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-        </select>
+          <option value="easy" {{ if eq .GameMode "easy" }} selected {{ end }}>Easy</option>
+          <option value="medium" {{ if eq .GameMode "medium" }} selected {{ end }}>Medium</option>
+          <option value="hard" {{ if eq .GameMode "hard" }} selected {{ end }}>Hard</option>
+      </select>
     </form>
 </body>
 

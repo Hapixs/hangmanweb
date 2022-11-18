@@ -37,6 +37,23 @@ func (u *User) SetUpUserCookies(w *http.ResponseWriter) {
 	mutex.Unlock()
 }
 
+func (u *User) GetScoreboardPlace(sb Scoreboard) int {
+	for i, v := range sb.Top {
+		if v.UniqueId == u.UniqueId {
+			return i
+		}
+	}
+	return -1
+}
+
+func (u *User) GetWinRatio() float32 {
+	return float32(u.Played) / float32(u.Wins)
+}
+
+func (u *User) GetLooseRatio() float32 {
+	return float32(u.Played) / float32(u.Loose)
+}
+
 func IsLogin(r *http.Request) bool {
 	c, err := r.Cookie("user_id")
 	if err != nil || c.Value == "" {

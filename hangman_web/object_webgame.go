@@ -8,11 +8,12 @@ import (
 )
 
 type WebGame struct {
-	Game    *hangman_classic.HangmanGame
-	Input   bytes.Buffer
-	IsWin   bool
-	IsLoose bool
-	User    *User
+	Game     *hangman_classic.HangmanGame
+	Input    bytes.Buffer
+	IsWin    bool
+	IsLoose  bool
+	User     *User
+	Gamemode string
 }
 
 var mutex = &sync.Mutex{}
@@ -26,7 +27,7 @@ func getGameFromCookies(w http.ResponseWriter, r *http.Request) *WebGame {
 	c, err := r.Cookie("sessionid")
 	sessionid := ""
 	if err != nil || sessions[c.Value] == nil || sessions[c.Value].User == nil {
-		return &WebGame{nil, bytes.Buffer{}, false, false, user}
+		return &WebGame{nil, bytes.Buffer{}, false, false, user, "easy"}
 	} else {
 		sessionid = c.Value
 	}
@@ -54,7 +55,7 @@ func StartNewGame(w *http.ResponseWriter, r *http.Request, gameMode string) {
 		user.SetUpUserCookies(w)
 	}
 	mutex.Lock()
-	sessions[Game.PublicId] = &WebGame{Game, bytes.Buffer{}, false, false, user}
+	sessions[Game.PublicId] = &WebGame{Game, bytes.Buffer{}, false, false, user, gameMode}
 	mutex.Unlock()
 	http.SetCookie(*w, &http.Cookie{Name: "sessionid", Value: Game.PublicId})
 	defer Game.StartGame()

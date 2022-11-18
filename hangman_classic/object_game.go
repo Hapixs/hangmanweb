@@ -28,8 +28,8 @@ type GameMode int
 type Gamestatus int
 
 const (
-	NORMAL GameMode = 0
-	HARD   GameMode = 1
+	NORMAL = 0
+	HARD   = 1
 
 	PLAYING Gamestatus = 0
 	ENDED   Gamestatus = 1
@@ -72,6 +72,9 @@ func (game *HangmanGame) StartGame() {
 }
 
 func (game *HangmanGame) Kill() {
+	if game == nil {
+		return
+	}
 	game.Gamestatus = int(ENDED)
 }
 
