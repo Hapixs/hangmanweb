@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
-    <title>Hangman - Team Absenteisme</title>
+
+    <title> YOU WIN ! </title>
+    <link rel="stylesheet" href="web/style.css">
 </head>
 
 
 <body>
     <h1> You win ! </h1>
-    <p> Click <a href="/reset"> here </a> to restart <p>
+    <div class="memewinlose"><img src="https://acegif.com/wp-content/uploads/funny-celebrate-8.gif"></div>
+    <form id="restartgame" action="/reset" method="get">
+        <input id="restartbouton" type="submit" value="restart" />
+    </form>
 </body>
+
 </html>

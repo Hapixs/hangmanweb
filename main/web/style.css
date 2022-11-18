@@ -124,6 +124,7 @@ h1 {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
 #psw {
     font-family: "Kimberley", monospace;
     font-size: 20px;
@@ -160,7 +161,7 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column; 
+    flex-direction: column;
 }
 
 #withoutnamesubmit {
@@ -171,4 +172,24 @@ h1 {
     height: 40px;
     font-family: "Kimberley", monospace;
     margin-top: 237px;
+}
+
+.memewinlose {
+    display: flex;
+    justify-content: center;
+    font-family: "Kimberley", monospace;
+}
+
+#restartgame {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#restartbouton {
+    border-radius: 5rem;
+    width: 100px;
+    height: 40px;
+    font-family: "Kimberley", monospace;
 }
