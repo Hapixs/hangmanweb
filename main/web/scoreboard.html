@@ -7,35 +7,37 @@
   <title>Hangman - Team Absenteisme</title>
   <link rel="stylesheet" href="web/style.css">
 </head>
-    <header>
-        <form id="formlogoutstat" action="/logout" method="get">
-          <input id="logoutstatistics" type="submit" value="logout" />
-        </form>
-        <form id="formlogoutstat" action="/statistics" method="get">
-          <input id="logoutstatistics" type="submit" value="statistics" />
-        </form>
-        <form id="formlogoutstat" action="/scoreboard" method="get">
-            <input id="logoutstatistics" type="submit" value="scoreboard" />
-        </form>
-      </header>
-    <body>
-        <div>
-            <form id="formscore" action="/scoreboard" method="post">
-              <select id="scoreboard" name="sb_type" id="sb_type">
-                  <option value="sb_letter" {{ if eq .SB_TYPE "sb_letter" }} selected {{end}}>Top letter finder</option>
-                  <option value="sb_words" {{ if eq .SB_TYPE "sb_words" }} selected {{end}}>Top words finder</option>
-                  <option value="sb_loose" {{ if eq .SB_TYPE "sb_loose" }} selected {{end}}>Top loose</option>
-                  <option value="sb_win" {{ if eq .SB_TYPE "sb_win" }} selected {{end}}>Top win</option>
-                  <option value="sb_points" {{ if eq .SB_TYPE "sb_points" }} selected {{end}}>Top point</option>
-              </select>
-              <input id="changescoreboard" type="submit" value="Changer" class="button">
-          </form>
-          </div>
+<header>
+  <form id="formlogoutstat" action="/logout" method="get">
+    <input id="logoutstatistics" type="submit" value="logout" />
+  </form>
+  <form id="formlogoutstat" action="/statistics" method="get">
+    <input id="logoutstatistics" type="submit" value="statistics" />
+  </form>
+  <form id="formlogoutstat" action="/scoreboard" method="get">
+    <input id="logoutstatistics" type="submit" value="scoreboard" />
+  </form>
+</header>
 
-        <div class="typescore"> {{ .SB_NAME }} </div>
-        <div class="affichescore"> {{ range .SB_USERS }}
-           {{ . }}
-            {{ end }}
-        </div>
-    </body>
+<body>
+  <div>
+    <form id="formscore" action="/scoreboard" method="post">
+      <select id="scoreboard" name="sb_type" id="sb_type">
+        <option value="sb_letter" {{ if eq .SB_TYPE "sb_letter" }} selected {{end}}>Top letter finder</option>
+        <option value="sb_words" {{ if eq .SB_TYPE "sb_words" }} selected {{end}}>Top words finder</option>
+        <option value="sb_loose" {{ if eq .SB_TYPE "sb_loose" }} selected {{end}}>Top loose</option>
+        <option value="sb_win" {{ if eq .SB_TYPE "sb_win" }} selected {{end}}>Top win</option>
+        <option value="sb_points" {{ if eq .SB_TYPE "sb_points" }} selected {{end}}>Top point</option>
+      </select>
+      <input id="changescoreboard" type="submit" value="Changer" class="button">
+    </form>
+  </div>
+
+  <div class="typescore"> {{ .SB_NAME }} </div>
+  <div class="affichescore"> {{ range .SB_USERS }}
+    {{ . }}
+    {{ end }}
+  </div>
+</body>
+
 </html>

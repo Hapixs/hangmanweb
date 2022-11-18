@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
 
-    <title> YOU LOSE  </title>
-    <link rel="stylesheet" href="web/style.css">
+  <title>Hangman - Team Absenteisme</title>
+  <link rel="stylesheet" href="web/style.css">
 </head>
 
 <header>
@@ -15,20 +16,22 @@
     <input id="logoutstatistics" type="submit" value="statistics" />
   </form>
   <form id="formlogoutstat" action="/scoreboard" method="get">
-      <input id="logoutstatistics" type="submit" value="scoreboard" />
+    <input id="logoutstatistics" type="submit" value="scoreboard" />
   </form>
 </header>
+
 <body>
-    <h1> You Lose ! </h1>
-    <div class="wordresult"> the word was {{ .GetGameToFind }} !</div>
-    <div class="memewinlose"><img src="https://thumbs.gfycat.com/BlankSorrowfulGermanspaniel-max-1mb.gif"></div>
-    <form id="restartgame" action="/restartsologame" method="post">
-        <input id="restartbouton" type="submit" value="restart" />
-        <select name="difficulty" id="difficulty">
-            <option value="easy" {{ if eq .GameMode "easy" }} selected {{ end }}>Easy</option>
-            <option value="medium" {{ if eq .GameMode "medium" }} selected {{ end }}>Medium</option>
-            <option value="hard" {{ if eq .GameMode "hard" }} selected {{ end }}>Hard</option>
-        </select>
-    </form>
+  <h1> You Lose ! </h1>
+  <div class="wordresult"> the word was {{ .GetGameToFind }} !</div>
+  <div class="memewinlose"><img src="https://thumbs.gfycat.com/BlankSorrowfulGermanspaniel-max-1mb.gif"></div>
+  <form id="restartgame" action="/restartsologame" method="post">
+    <input id="restartbouton" type="submit" value="restart" />
+    <select name="difficulty" id="difficulty">
+      <option value="easy" {{ if eq .GameMode "easy" }} selected {{ end }}>Easy</option>
+      <option value="medium" {{ if eq .GameMode "medium" }} selected {{ end }}>Medium</option>
+      <option value="hard" {{ if eq .GameMode "hard" }} selected {{ end }}>Hard</option>
+    </select>
+  </form>
 </body>
+
 </html>

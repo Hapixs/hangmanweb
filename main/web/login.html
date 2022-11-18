@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
     <title> Login-Hangman </title>
     <link rel="stylesheet" href="web/style.css">
@@ -18,7 +19,7 @@
         <div class="login">
             <div class="compte">connecte toi !</div>
             <div class="barre">
-                <form id="formuser" action="/login" method="post"> 
+                <form id="formuser" action="/login" method="post">
                     <label id="name" for="username">username</label>
                     <input id="username" name="username" type="text" autofocus="autofocus" autocomplete="off">
                     <label id="psw" for="password">password</label>
@@ -28,11 +29,12 @@
             </div>
         </div>
         <div class="nolog">
-            <div class="invite">jouer en tant qu'inviter</div> 
+            <div class="invite">jouer en tant qu'inviter</div>
             <form id="randomeuser" action="/nolog" method="get">
                 <input id="withoutnamesubmit" type="submit" value="play" />
             </form>
         </div>
     </div>
 </body>
+
 </html>
