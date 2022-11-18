@@ -132,14 +132,15 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 			Game.User.Played++
 			data = HtmlData{
 				GameMode: Game.Gamemode,
+				GetGameToFind: Game.Game.GetGameToFind(),
 			}
 		} else if Game.IsLoose {
 			tp = template.Must(template.ParseFiles(templatePathLoose))
 			Game.User.Loose++
 			Game.User.Played++
-			println(Game.Gamemode)
 			data = HtmlData{
 				GameMode: Game.Gamemode,
+				GetGameToFind: Game.Game.GetGameToFind(),
 			}
 		} else {
 			tp = template.Must(template.ParseFiles(templatePathIndex))
