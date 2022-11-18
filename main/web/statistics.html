@@ -3,9 +3,9 @@
 
 
 <head>
-  <meta charset="utf-8">
-  <title>Hangman - Team Absenteisme</title>
-  <link rel="stylesheet" href="web/style.css">
+    <meta charset="utf-8">
+    <title>Hangman - Team Absenteisme</title>
+    <link rel="stylesheet" href="web/style.css">
 </head>
 
 <header>
@@ -17,18 +17,21 @@
 
 <body>
     <div class="statistics">
-    Logged as {{ .Username }}
-    <br>
-    <p> Game played {{ .Played }}
-    Win amount {{ .Wins }}
-    <br>
-    Loose amount {{ .Loose }}
-    <br> 
-    Letter found {{ .Letters }} 
-    <br>
-    Words found {{ .Words }} 
-    <p> Win ratio {{ .WinRatio}} </p>
-    <p> Loose ratio {{ .LooseRatio }}</p>
+        Logged as: {{ .Username }}
+        <br><br>
+        Game played {{ .Played }}
+        <br><br>
+        Win amount {{ .Wins }}
+        <br><br>
+        Loose amount {{ .Loose }}
+        <br><br>
+        Letter found {{ .Letters }}
+        <br><br>
+        Words found {{ .Words }}
+        <br><br>
+        Win ratio {{ .WinRatio}}
+        <br><br>
+        Loose ratio {{ .LooseRatio }}
     </div>
 </body>
 
