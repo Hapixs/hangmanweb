@@ -3,6 +3,7 @@ package hangmanweb
 import (
 	"hangman_classic"
 	"net/http"
+	"strconv"
 	"text/template"
 )
 
@@ -178,4 +179,41 @@ func StatisticsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tp.Execute(w, data)
+}
+
+type ScoreboardHtmlData struct {
+	SB_NAME  string
+	SB_TYPE  string
+	SB_USERS []string
+}
+
+func ScoreboardHandler(w http.ResponseWriter, r *http.Request) {
+	sbt := ScoreboardType_Letter
+
+	if r.Method == "POST" {
+		sbt = r.FormValue("sb_type")
+	}
+
+	tp := template.Must(template.ParseFiles("web/scoreboard.html"))
+
+	sb := BuildScoreboard(sbt)
+	sbd := ScoreboardHtmlData{}
+	sbd.SB_NAME = sb.Name
+	sbd.SB_TYPE = sbt
+	for i, v := range sb.Top {
+		switch sbt {
+		case ScoreboardType_Letter:
+			sbd.SB_USERS = append(sbd.SB_USERS, "#"+strconv.Itoa(i+1)+": "+v.Username+" - "+strconv.Itoa(v.LetterFind))
+		case ScoreboardType_Words:
+			sbd.SB_USERS = append(sbd.SB_USERS, "#"+strconv.Itoa(i+1)+": "+v.Username+" - "+strconv.Itoa(v.WordsFind))
+		case ScoreboardType_Points:
+			sbd.SB_USERS = append(sbd.SB_USERS, "#"+strconv.Itoa(i+1)+": "+v.Username+" - "+strconv.Itoa(v.Points))
+		case ScoreboardType_loose:
+			sbd.SB_USERS = append(sbd.SB_USERS, "#"+strconv.Itoa(i+1)+": "+v.Username+" - "+strconv.Itoa(v.Loose))
+		case ScoreboardType_win:
+			sbd.SB_USERS = append(sbd.SB_USERS, "#"+strconv.Itoa(i+1)+": "+v.Username+" - "+strconv.Itoa(v.Wins))
+		}
+	}
+
+	tp.Execute(w, sbd)
 }

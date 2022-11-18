@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+    </head>
+
+    <body>
+        <div>
+            <form action="/scoreboard" method="post">
+              <select name="sb_type" id="sb_type">
+                  <option value="sb_letter" {{ if eq .SB_TYPE "sb_letter" }} selected {{end}}>Top letter finder</option>
+                  <option value="sb_words" {{ if eq .SB_TYPE "sb_words" }} selected {{end}}>Top words finder</option>
+                  <option value="sb_loose" {{ if eq .SB_TYPE "sb_loose" }} selected {{end}}>Top loose</option>
+                  <option value="sb_win" {{ if eq .SB_TYPE "sb_win" }} selected {{end}}>Top win</option>
+                  <option value="sb_points" {{ if eq .SB_TYPE "sb_points" }} selected {{end}}>Top point</option>
+              </select>
+              <input type="submit" value="Changer" class="button">
+          </form>
+          </div>
+
+        <h1> {{ .SB_NAME }} <h1>
+        {{ range .SB_USERS }}
+        <p> {{ . }}
+            {{ end }}
+    </body>
+</html>
