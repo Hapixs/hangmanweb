@@ -284,3 +284,43 @@ header {
     justify-content: center;
     font-family: "Kimberley", monospace;
 }
+
+#formscore {
+    display: flex;
+    justify-content: baseline;
+    margin-top: 10px;
+}
+
+#scoreboard {
+    border-radius: 5rem;
+    width: 120px;
+    height: 40px;
+    font-family: "Kimberley", monospace;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+#changescoreboard {
+    border-radius: 5rem;
+    width: 80px;
+    height: 30px;
+    font-family: "Kimberley", monospace;
+    margin-top: 15px;
+    margin-left: 10px;
+}
+
+.typescore {
+    display: flex;
+    justify-content: center;
+    font-family: "Kimberley", monospace;
+    margin-top: 30px;
+    font-size: 50px;
+}
+
+.affichescore {
+    display: flex;
+    justify-content: center;
+    font-family: "Kimberley", monospace;
+    margin-top: 40px;
+    font-size: 20px;
+}
