@@ -64,10 +64,12 @@
       {{ end }}
     </div>
     <div class="droite">
-      {{ if eq .GetGameTries 0 }}
-      {{ else }}
-      <img src="web/{{ .GetGameTries }}.png">
-      {{ end }}
+      <div class="pendu">
+        {{ if eq .GetGameTries 0 }}
+        {{ else }}
+        <img src="web/{{ .GetGameTries }}.png">
+        {{ end }}
+      </div>
     </div>
   </div>
 

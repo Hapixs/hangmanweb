@@ -20,6 +20,7 @@
 </header>
 <body>
     <h1> You Lose ! </h1>
+    <div class="wordresult"> the word was {{ .GetGameToFind }} !</div>
     <div class="memewinlose"><img src="https://thumbs.gfycat.com/BlankSorrowfulGermanspaniel-max-1mb.gif"></div>
     <form id="restartgame" action="/restartsologame" method="post">
         <input id="restartbouton" type="submit" value="restart" />

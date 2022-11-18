@@ -34,6 +34,13 @@ h1 {
     background-color: red;
 }
 
+.pendu {
+    display: flex;
+    justify-content: center;
+    font-family: "Kimberley", monospace;
+    margin-top: 100px;
+}
+
 .gauche,
 .droite {
     height: 71vh;
@@ -178,6 +185,14 @@ h1 {
     display: flex;
     justify-content: center;
     font-family: "Kimberley", monospace;
+}
+
+.wordresult {
+    display: flex;
+    justify-content: center;
+    font-size: 40px;
+    font-family: "Kimberley", monospace;
+    margin-bottom: 20px;
 }
 
 #restartgame {

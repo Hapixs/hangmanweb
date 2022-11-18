@@ -21,6 +21,7 @@
 
 <body>
     <h1> You win ! </h1>
+    <div class="wordresult"> the word was {{ .GetGameToFind }} !</div>
     <div class="memewinlose"><img src="https://acegif.com/wp-content/uploads/funny-celebrate-8.gif"></div>
     <form id="restartgame" action="/restartsologame" method="post">
         <input id="restartbouton" type="submit" value="restart" />
