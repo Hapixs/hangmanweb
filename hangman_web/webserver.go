@@ -40,7 +40,6 @@ func AutoSaveWorker(wg *sync.WaitGroup) {
 	defer wg.Done()
 	for {
 		time.Sleep(time.Second * 10)
-		println("Saving user data ...")
 		SaveUserCSV()
 	}
 }
@@ -65,7 +64,12 @@ func LoadUserCSV() {
 	for i := 1; i < len(records); i++ {
 		userId, _ := strconv.Atoi(records[i][2])
 		userPoint, _ := strconv.Atoi(records[i][1])
-		usermap[userId] = &User{records[i][0], userPoint, userId, records[i][3], false}
+		userWins, _ := strconv.Atoi(records[i][4])
+		userLoose, _ := strconv.Atoi(records[i][5])
+		Played, _ := strconv.Atoi(records[i][6])
+		LetterFind, _ := strconv.Atoi(records[i][7])
+		WordsFind, _ := strconv.Atoi(records[i][8])
+		usermap[userId] = &User{records[i][0], userPoint, userId, records[i][3], false, userWins, userLoose, Played, LetterFind, WordsFind}
 	}
 
 	println("Loaded " + strconv.Itoa(len(usermap)) + " users from csv")
@@ -73,13 +77,22 @@ func LoadUserCSV() {
 
 func SaveUserCSV() {
 	records := [][]string{
-		{"username", "points", "uniqueid", "password"},
+		{"username", "points", "uniqueid", "password", "wins", "loose", "played", "lettersfind", "wordsfind"},
 	}
 	for _, v := range usermap {
 		if v.isAnnonyme {
 			continue
 		}
-		records = append(records, []string{v.Username, strconv.Itoa(v.Points), strconv.Itoa(v.UniqueId), v.Password})
+		records = append(records,
+			[]string{v.Username,
+				strconv.Itoa(v.Points),
+				strconv.Itoa(v.UniqueId),
+				v.Password,
+				strconv.Itoa(v.Wins),
+				strconv.Itoa(v.Loose),
+				strconv.Itoa(v.Played),
+				strconv.Itoa(v.LetterFind),
+				strconv.Itoa(v.WordsFind)})
 	}
 
 	f, err := os.Create("users.csv")
@@ -95,5 +108,5 @@ func SaveUserCSV() {
 	}
 	f.Close()
 	w.Flush()
-	println("User data saved !")
+	println("Saved " + strconv.Itoa(len(usermap)) + " users")
 }

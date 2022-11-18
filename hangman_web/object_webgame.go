@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"hangman_classic"
 	"net/http"
-	"os"
 	"sync"
 )
 
@@ -35,9 +34,19 @@ func getGameFromCookies(w http.ResponseWriter, r *http.Request) *WebGame {
 	return sessions[sessionid]
 }
 
-func StartNewGame(w *http.ResponseWriter, r *http.Request) {
+func StartNewGame(w *http.ResponseWriter, r *http.Request, gameMode string) {
 	Game := &hangman_classic.HangmanGame{}
-	prepareGameForWeb(Game)
+	args := []string{}
+	switch gameMode {
+	default:
+		args = append(args, "words.txt")
+	case "medium":
+		args = append(args, "words2.txt")
+	case "hard":
+		args = append(args, "words3.txt")
+		args = append(args, "--hard")
+	}
+	prepareGameForWeb(Game, args)
 	user, err := GetUserFromRequest(r)
 	if err != nil {
 		user = &User{Username: "Unknown"}
@@ -59,13 +68,13 @@ func getWebGameFromId(id string) *WebGame {
 	return s
 }
 
-func prepareGameForWeb(Game *hangman_classic.HangmanGame) {
-	os.Args = append(os.Args, "words.txt")
-	Game.InitGame()
+func prepareGameForWeb(Game *hangman_classic.HangmanGame, args []string) {
+	Game.InitGame(args)
 	Game.ReplaceExecution(overridedExecutionWaitForInput, string(hangman_classic.DefaultExecutionWaitForInput))
 	Game.ReplaceExecution(overridedExecutionCheckForRemainingTries, string(hangman_classic.DefaultExecutionCheckForRemainingTries))
 	Game.ReplaceExecution(overridedExecutionCheckForWordDiscover, string(hangman_classic.DefaultExecutionCheckForWordDiscover))
 	Game.ReplaceExecution(overridedExecutionCheckForWord, string(hangman_classic.DefaultExecutionCheckForWord))
+	Game.ReplaceExecution(overridedExecutionCheckForLetterOccurence, string(hangman_classic.DefaultExecutionCheckForLetterOccurence))
 	Game.Config.SetConfigItemValue(hangman_classic.ConfigMultipleWorkers, true)
 	Game.RemoveExecution(hangman_classic.DefaultExecutionDisplayBody)
 }

@@ -35,9 +35,8 @@ const (
 	ENDED   Gamestatus = 1
 )
 
-func (game *HangmanGame) InitGame() {
+func (game *HangmanGame) InitGame(args []string) {
 	InitEnvironement()
-	args := os.Args[1:]
 	game.Config.InitConfig()
 
 	game.GameProcessArguments(args)
@@ -62,7 +61,7 @@ func (game *HangmanGame) GeneratePublicId() {
 func (game *HangmanGame) StartGame() {
 	_, isInit, _ := game.Config.GetConfigItem(ConfigIsInit)
 	if !isInit {
-		game.InitGame()
+		game.InitGame([]string{})
 	}
 	_, b, _ := game.Config.GetConfigItem(ConfigMultipleWorkers)
 	if b {

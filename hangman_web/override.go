@@ -30,6 +30,7 @@ var overridedExecutionCheckForRemainingTries = hangman_classic.GameExecution{Nam
 	}
 	if game.GetGameTries() >= 10 {
 		Game.IsLoose = true
+		Game.User.Loose++
 		return true
 	}
 	return false
@@ -40,6 +41,7 @@ var overridedExecutionCheckForWordDiscover = hangman_classic.GameExecution{Name:
 	if !hangman_classic.HasOccurenceLetter(game.GetGameWord(), '_') {
 		Game.IsWin = true
 		Game.User.Points += 1
+		Game.User.Wins++
 		return true
 	}
 	return false
@@ -50,6 +52,9 @@ var overridedExecutionCheckForWord = hangman_classic.GameExecution{Name: string(
 	if len(*userInput) > 1 {
 		if game.GetGameToFind() == *userInput {
 			Game.IsWin = true
+			Game.User.Wins++
+			Game.User.Points++
+			Game.User.WordsFind++
 			return true
 		}
 		game.AddGameTry()
@@ -58,5 +63,18 @@ var overridedExecutionCheckForWord = hangman_classic.GameExecution{Name: string(
 		return true
 	}
 
+	return false
+}}
+
+var overridedExecutionCheckForLetterOccurence = hangman_classic.GameExecution{Name: string(hangman_classic.DefaultExecutionCheckForLetterOccurence), Func: func(userInput *string, game *hangman_classic.HangmanGame) bool {
+	Game := getWebGameFromId(game.PublicId)
+	rn := []rune(*userInput)[0]
+	if !hangman_classic.HasOccurenceLetter(game.GetGameToFind(), rune(rn)) {
+		game.AddGameTry()
+		hangman_classic.AddInformationHeadMessage(string(rn) + " is not in this word..")
+	} else {
+		game.SetGameWord(game.UpdateGameWord(game.GetGameToFind(), game.GetGameWord(), rn))
+		Game.User.LetterFind += len(hangman_classic.GetOccurenceLetter(game.GetGameToFind(), rn))
+	}
 	return false
 }}

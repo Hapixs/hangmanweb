@@ -60,7 +60,7 @@ func LoginPostHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		user := &User{Username: r.Form.Get("username"), Password: encodedPass}
+		user := &User{Username: r.Form.Get("username"), Password: encodedPass, isAnnonyme: false, Points: 0, Wins: 0, Loose: 0, Played: 0, LetterFind: 0, WordsFind: 0}
 		println(r.Form.Get("username"))
 		user.GenerateUniqueId()
 		user.SetUpUserCookies(&w)
@@ -87,7 +87,8 @@ func StartSoloPageHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-	StartNewGame(&w, r)
+	gameMode := r.Form.Get("difficulty")
+	StartNewGame(&w, r, gameMode)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 

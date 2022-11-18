@@ -14,6 +14,11 @@ type User struct {
 	UniqueId   int
 	Password   string
 	isAnnonyme bool
+	Wins       int
+	Loose      int
+	Played     int
+	LetterFind int
+	WordsFind  int
 }
 
 var usermap = map[int](*User){}

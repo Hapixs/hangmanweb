@@ -37,11 +37,18 @@
 
       {{ if eq .IsInGame false}}
       <div>
-        <p> <a href="/startsologame">Game solo</a></p> 
-        <form action="/joinpool" method="post">
+        <form action="/startsologame" method="post">
+          <select name="difficulty" id="difficulty">
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+          </select>
+          <input type="submit" value="Play" class="button">
+      </form>
+       <!-- <form action="/joinpool" method="post">
           <p> Pool id: <p>
           <input id="poolidbox" name="poolidbox" type="text" autocomplete="off">
-        </form>
+        </form>-->
       </div>
       {{ end }}
       
