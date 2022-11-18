@@ -192,4 +192,36 @@ h1 {
     width: 100px;
     height: 40px;
     font-family: "Kimberley", monospace;
+    margin-top: 50px;
+}
+
+#difficulty {
+    border-radius: 5rem;
+    width: 100px;
+    height: 40px;
+    font-family: "Kimberley", monospace;
+    margin-top: 50px;
+}
+
+#start {
+    border-radius: 5rem;
+    width: 100px;
+    height: 40px;
+    font-family: "Kimberley", monospace;
+    margin-top: 50px;
+}
+
+#formdifficulty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.choosediff {
+    display: flex;
+    justify-content: center;
+    font-family: "Kimberley", monospace;
+    margin-top: 20px;
+    font-size: 25px;
 }

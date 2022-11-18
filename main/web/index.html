@@ -13,15 +13,16 @@
   <a href="/logout"> Logout </a>
   <a href="/statistics"> Statistics </a>
 </header>
+
 <body>
   <h1>The Hangman</h1>
-  
+
   <!-- once game is finished(if the number of tries is 0): {{ .GetGameToFind }} -->
   <div class="container">
     <div class="gauche">
       {{if eq .IsInGame true}}
       <div class="word">
-        <p>{{ .GetGameWord }}</p> 
+        <p>{{ .GetGameWord }}</p>
       </div>
       <div class="barre">
         <form action="/hangman" method="post">
@@ -38,24 +39,25 @@
 
       {{ if eq .IsInGame false}}
       <div>
-        <form action="/startsologame" method="post">
-          <select name="difficulty" id="difficulty">
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
+        <div class="choosediff">choisi ta difficulter</div>
+        <form id="formdifficulty" action="/startsologame" method="post">
+          <select id="difficulty" name="difficulty" id="difficulty">
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
           </select>
-          <input type="submit" value="Play" class="button">
-      </form>
-       <!-- <form action="/joinpool" method="post">
-          <p> Pool id: <p>
-          <input id="poolidbox" name="poolidbox" type="text" autocomplete="off">
-        </form>-->
+          <br>
+          <input id="start" type="submit" value="Play" class="button">
+        </form>
+        <!-- <form action="/joinpool" method="post">
+            <p> Pool id: <p>
+            <input id="poolidbox" name="poolidbox" type="text" autocomplete="off">
+          </form>-->
       </div>
       {{ end }}
-      
     </div>
     <div class="droite">
-      
+
     </div>
   </div>
 
