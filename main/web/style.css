@@ -225,3 +225,24 @@ h1 {
     margin-top: 20px;
     font-size: 25px;
 }
+
+#formlogoutstat {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#logoutstatistics {
+    border-radius: 5rem;
+    width: 80px;
+    height: 30px;
+    font-family: "Kimberley", monospace;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+header {
+    display:flex;
+    flex-direction:row;
+}
