@@ -22,6 +22,7 @@ type User struct {
 }
 
 var usermap = map[int](*User){}
+var usermapHash = HashMap(usermap)
 
 func (u *User) GenerateUniqueId() {
 	rand.Seed(time.Now().Unix())

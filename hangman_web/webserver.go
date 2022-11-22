@@ -1,12 +1,17 @@
 package hangmanweb
 
 import (
+	"crypto/md5"
 	"encoding/csv"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 	"strconv"
 	"sync"
+	"syscall"
 	"time"
 )
 
@@ -20,6 +25,16 @@ func StartServer() {
 	wg.Add(1)
 	go AutoSaveWorker(&wg)
 	go LoadUserCSV()
+
+	sigchnl := make(chan os.Signal, 1)
+	signal.Notify(sigchnl)
+
+	go func() {
+		for {
+			s := <-sigchnl
+			osSignalHandler(s)
+		}
+	}()
 
 	http.ListenAndServe(":8080", nil)
 }
@@ -79,6 +94,10 @@ func LoadUserCSV() {
 }
 
 func SaveUserCSV() {
+	hash := HashMap(usermap)
+	if hash == usermapHash {
+		return
+	}
 	records := [][]string{
 		{"username", "points", "uniqueid", "password", "wins", "loose", "played", "lettersfind", "wordsfind"},
 	}
@@ -112,4 +131,24 @@ func SaveUserCSV() {
 	f.Close()
 	w.Flush()
 	println("Saved " + strconv.Itoa(len(records)-1) + " users")
+	usermapHash = hash
+}
+
+func osSignalHandler(signal os.Signal) {
+	if signal == syscall.SIGTERM || signal == syscall.SIGINT {
+		fmt.Println("Program will terminate now.")
+		SaveUserCSV()
+		os.Exit(0)
+	} else {
+		fmt.Println("Ignoring signal: ", signal)
+	}
+}
+
+func HashMap(m map[int](*User)) [16]byte {
+	arrBytes := []byte{}
+	for _, item := range m {
+		jsonBytes, _ := json.Marshal(item)
+		arrBytes = append(arrBytes, jsonBytes...)
+	}
+	return md5.Sum(arrBytes)
 }

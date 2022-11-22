@@ -1,6 +1,9 @@
 package hangmanweb
 
-import "sort"
+import (
+	"sort"
+	"time"
+)
 
 const (
 	ScoreboardType_win    = "sb_win"
@@ -14,6 +17,11 @@ type Scoreboard struct {
 	Name string
 	Type string
 	Top  []*User
+}
+
+func DynamicScoreboardLoader() {
+
+	time.Sleep(time.Minute)
 }
 
 func BuildScoreboard(Type string) *Scoreboard {

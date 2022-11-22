@@ -26,15 +26,15 @@ const (
 )
 
 func HangmanPostHandler(w http.ResponseWriter, r *http.Request) {
-	Game := getGameFromCookies(w, r)
 	switch r.Method {
 	case "POST":
 		if err := r.ParseForm(); err != nil {
 			println("ParseForm() err: %v", err)
 			return
 		}
+		Game := getGameFromCookies(w, r)
+		Game.Input.Write([]byte(r.Form.Get("input")))
 	}
-	Game.Input.Write([]byte(r.Form.Get("input")))
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
@@ -63,10 +63,8 @@ func LoginPostHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		user := &User{Username: r.Form.Get("username"), Password: encodedPass, isAnnonyme: false, Points: 0, Wins: 0, Loose: 0, Played: 0, LetterFind: 0, WordsFind: 0}
-		println(r.Form.Get("username"))
 		user.GenerateUniqueId()
 		user.SetUpUserCookies(&w)
-		println("Registered " + user.Username)
 	}
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
@@ -130,7 +128,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 			Game.User.Points++
 			Game.User.Played++
 			data = HtmlData{
-				GameMode: Game.Gamemode,
+				GameMode:      Game.Gamemode,
 				GetGameToFind: Game.Game.GetGameToFind(),
 			}
 		} else if Game.IsLoose {
@@ -138,7 +136,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 			Game.User.Loose++
 			Game.User.Played++
 			data = HtmlData{
-				GameMode: Game.Gamemode,
+				GameMode:      Game.Gamemode,
 				GetGameToFind: Game.Game.GetGameToFind(),
 			}
 		} else {
