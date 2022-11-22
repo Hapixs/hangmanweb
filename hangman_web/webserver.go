@@ -139,8 +139,6 @@ func osSignalHandler(signal os.Signal) {
 		fmt.Println("Program will terminate now.")
 		SaveUserCSV()
 		os.Exit(0)
-	} else {
-		fmt.Println("Ignoring signal: ", signal)
 	}
 }
 
