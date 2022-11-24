@@ -1,4 +1,4 @@
-package main
+package objects
 
 import "github.com/Hapixs/hangmanclassic"
 

@@ -1,11 +1,9 @@
-package main
+package handlers
 
 import (
 	"net/http"
 	"strconv"
 	"text/template"
-
-	"github.com/Hapixs/hangmanclassic"
 )
 
 type HtmlData struct {
