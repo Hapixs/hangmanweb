@@ -21,19 +21,19 @@ func CreatePool(webGame WebGame) *GamePool {
 	gp.UniqueID = rand.Intn(10000000000)
 
 	gp.Games = append(gp.Games, &webGame)
-	mutex.Lock()
+	Mutex.Lock()
 	PoolByUserID[strconv.Itoa(webGame.User.UniqueId)] = gp
 	PoolByID[strconv.Itoa(gp.UniqueID)] = gp
-	mutex.Unlock()
+	Mutex.Unlock()
 
 	return gp
 }
 
 func (gp *GamePool) AddUserGame(wg *WebGame) {
 	gp.Games = append(gp.Games, wg)
-	mutex.Lock()
+	Mutex.Lock()
 	PoolByUserID[strconv.Itoa(wg.User.UniqueId)] = gp
-	mutex.Unlock()
+	Mutex.Unlock()
 }
 
 func GetPoolFromGame(wg WebGame) *GamePool {

@@ -1,31 +1,26 @@
 package main
 
 import (
-	"crypto/md5"
 	"encoding/csv"
-	"encoding/json"
 	"fmt"
-	"log"
+	"handlers"
 	"net/http"
+	"objects"
 	"os"
 	"os/signal"
 	"strconv"
 	"syscall"
-	"time"
 )
 
 func main() {
 	StartServer()
 }
 
-var sessions = map[string](*WebGame){}
-
 func StartServer() {
-	InitWebHandlers()
-	fs := http.FileServer(http.Dir("./web/"))
-	http.Handle("/web/", http.StripPrefix("/web/", fs))
+	InitWebServer()
 
-	go AutoSaveWorker()
+	go autoSaveWorker()
+
 	go LoadUserCSV()
 
 	sigchnl := make(chan os.Signal, 1)
@@ -41,29 +36,25 @@ func StartServer() {
 	http.ListenAndServe(":8080", nil)
 }
 
-func InitWebHandlers() {
-	http.HandleFunc("/hangman", HangmanPostHandler)
-	http.HandleFunc("/", IndexHandler)
-	http.HandleFunc("/reset", ResetHandler)
-	http.HandleFunc("/login", LoginPostHandler)
-	http.HandleFunc("/startsologame", StartSoloPageHandler)
-	http.HandleFunc("/nolog", AnnoLoginHandler)
-	http.HandleFunc("/logout", DisconnectHandler)
-	http.HandleFunc("/restartsologame", RestartSoloGameHandler)
-	http.HandleFunc("/statistics", StatisticsHandler)
-	http.HandleFunc("/scoreboard", ScoreboardHandler)
-}
+func InitWebServer() {
+	fs := http.FileServer(http.Dir("./static/"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-func AutoSaveWorker() {
-	for {
-		time.Sleep(time.Second * 10)
-		SaveUserCSV()
-	}
+	http.HandleFunc("/hangman", handlers.HangmanPostHandler)
+	http.HandleFunc("/", handlers.IndexHandler)
+	http.HandleFunc("/reset", handlers.ResetHandler)
+	http.HandleFunc("/login", handlers.LoginPostHandler)
+	http.HandleFunc("/startsologame", handlers.StartSoloPageHandler)
+	http.HandleFunc("/nolog", handlers.AnnoLoginHandler)
+	http.HandleFunc("/logout", handlers.DisconnectHandler)
+	http.HandleFunc("/restartsologame", handlers.RestartSoloGameHandler)
+	http.HandleFunc("/statistics", handlers.StatisticsHandler)
+	http.HandleFunc("/scoreboard", handlers.ScoreboardHandler)
 }
 
 func LoadUserCSV() {
 
-	f, err := os.Open("users.csv")
+	f, err := os.Open("data/users.csv")
 
 	if err != nil {
 		println("No users.csv found.")
@@ -86,51 +77,10 @@ func LoadUserCSV() {
 		Played, _ := strconv.Atoi(records[i][6])
 		LetterFind, _ := strconv.Atoi(records[i][7])
 		WordsFind, _ := strconv.Atoi(records[i][8])
-		usermap[userId] = &User{Username: records[i][0], Points: userPoint, UniqueId: userId, Password: records[i][3], isAnnonyme: false, Wins: userWins, Loose: userLoose, Played: Played, LetterFind: LetterFind, WordsFind: WordsFind}
+		objects.Usermap[userId] = &objects.User{Username: records[i][0], Points: userPoint, UniqueId: userId, Password: records[i][3], IsAnnonyme: false, Wins: userWins, Loose: userLoose, Played: Played, LetterFind: LetterFind, WordsFind: WordsFind}
 	}
 
-	println("Loaded " + strconv.Itoa(len(usermap)) + " users from csv")
-}
-
-func SaveUserCSV() {
-	hash := HashMap(usermap)
-	if hash == usermapHash {
-		return
-	}
-	records := [][]string{
-		{"username", "points", "uniqueid", "password", "wins", "loose", "played", "lettersfind", "wordsfind"},
-	}
-	for _, v := range usermap {
-		if v.isAnnonyme {
-			continue
-		}
-		records = append(records,
-			[]string{v.Username,
-				strconv.Itoa(v.Points),
-				strconv.Itoa(v.UniqueId),
-				v.Password,
-				strconv.Itoa(v.Wins),
-				strconv.Itoa(v.Loose),
-				strconv.Itoa(v.Played),
-				strconv.Itoa(v.LetterFind),
-				strconv.Itoa(v.WordsFind)})
-	}
-
-	f, err := os.Create("users.csv")
-
-	if err != nil {
-		log.Fatalln("failed to open file", err)
-	}
-
-	w := csv.NewWriter(f)
-
-	if err := w.WriteAll(records); err != nil {
-		log.Fatalln("error writing record to file", err)
-	}
-	f.Close()
-	w.Flush()
-	println("Saved " + strconv.Itoa(len(records)-1) + " users")
-	usermapHash = hash
+	println("Loaded " + strconv.Itoa(len(objects.Usermap)) + " users from csv")
 }
 
 func osSignalHandler(signal os.Signal) {
@@ -139,13 +89,4 @@ func osSignalHandler(signal os.Signal) {
 		SaveUserCSV()
 		os.Exit(0)
 	}
-}
-
-func HashMap(m map[int](*User)) [16]byte {
-	arrBytes := []byte{}
-	for _, item := range m {
-		jsonBytes, _ := json.Marshal(item)
-		arrBytes = append(arrBytes, jsonBytes...)
-	}
-	return md5.Sum(arrBytes)
 }

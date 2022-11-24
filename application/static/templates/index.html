@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <title>Hangman - Team Absenteisme</title>
-  <link rel="stylesheet" href="web/style.css">
+  <link rel="stylesheet" href="static/css/style.css">
 </head>
 
 
@@ -63,7 +63,7 @@
       <div class="pendu">
         {{ if eq .GetGameTries 0 }}
         {{ else }}
-        <img src="web/{{ .GetGameTries }}.png">
+        <img src="static/assets/{{ .GetGameTries }}.png">
         {{ end }}
       </div>
     </div>

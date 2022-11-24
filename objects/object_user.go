@@ -13,7 +13,7 @@ type User struct {
 	Points     int
 	UniqueId   int
 	Password   string
-	isAnnonyme bool
+	IsAnnonyme bool
 	Wins       int
 	Loose      int
 	Played     int
@@ -21,8 +21,7 @@ type User struct {
 	WordsFind  int
 }
 
-var usermap = map[int](*User){}
-var usermapHash = HashMap(usermap)
+var Usermap = map[int](*User){}
 
 func (u *User) GenerateUniqueId() {
 	rand.Seed(time.Now().Unix())
@@ -33,9 +32,9 @@ func (u *User) SetUpUserCookies(w *http.ResponseWriter) {
 	c := http.Cookie{Name: "user_id", Value: strconv.Itoa(u.UniqueId)}
 	c.Expires.After(time.Now().Add(time.Hour))
 	http.SetCookie(*w, &c)
-	mutex.Lock()
-	usermap[u.UniqueId] = u
-	mutex.Unlock()
+	Mutex.Lock()
+	Usermap[u.UniqueId] = u
+	Mutex.Unlock()
 }
 
 func (u *User) GetScoreboardPlace(sb Scoreboard) int {
@@ -61,7 +60,7 @@ func IsLogin(r *http.Request) bool {
 		return false
 	}
 	id, _ := strconv.Atoi(c.Value)
-	if usermap[id] == nil {
+	if Usermap[id] == nil {
 		return false
 	}
 	return err == nil
@@ -73,6 +72,6 @@ func GetUserFromRequest(r *http.Request) (*User, error) {
 	}
 	uniqueid, _ := r.Cookie("user_id")
 	ui, _ := strconv.Atoi(uniqueid.Value)
-	user := usermap[ui]
+	user := Usermap[ui]
 	return user, nil
 }

@@ -42,7 +42,7 @@ func BuildScoreboard(Type string) *Scoreboard {
 		sb.Name = "Top win"
 	}
 
-	for _, v := range usermap {
+	for _, v := range Usermap {
 		sb.Top = append(sb.Top, v)
 	}
 

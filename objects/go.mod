@@ -1,5 +1,5 @@
-module github.com/Hapixs/hangmanweb/objects
+module objects
 
 go 1.19
 
-require github.com/Hapixs/hangmanclassic v0.0.0-20221124123743-1eb7e3082399
+require github.com/Hapixs/hangmanclassic v0.0.0-20221124170645-d49b0e4e48f0

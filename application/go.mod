@@ -1,3 +1,3 @@
-module github.com/Hapixs/hangmanweb/application
+module application
 
 go 1.19

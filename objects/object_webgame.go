@@ -17,9 +17,9 @@ type WebGame struct {
 	Gamemode string
 }
 
-var mutex = &sync.Mutex{}
+var Mutex = &sync.Mutex{}
 
-func getGameFromCookies(w http.ResponseWriter, r *http.Request) *WebGame {
+func GetGameFromCookies(w http.ResponseWriter, r *http.Request) *WebGame {
 	if !IsLogin(r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
@@ -27,13 +27,13 @@ func getGameFromCookies(w http.ResponseWriter, r *http.Request) *WebGame {
 	user, _ := GetUserFromRequest(r)
 	c, err := r.Cookie("sessionid")
 	sessionid := ""
-	if err != nil || sessions[c.Value] == nil || sessions[c.Value].User == nil {
+	if err != nil || Sessions[c.Value] == nil || Sessions[c.Value].User == nil {
 		return &WebGame{nil, bytes.Buffer{}, false, false, user, "easy"}
 	} else {
 		sessionid = c.Value
 	}
 
-	return sessions[sessionid]
+	return Sessions[sessionid]
 }
 
 func StartNewGame(w *http.ResponseWriter, r *http.Request, gameMode string) {
@@ -41,11 +41,11 @@ func StartNewGame(w *http.ResponseWriter, r *http.Request, gameMode string) {
 	args := []string{}
 	switch gameMode {
 	default:
-		args = append(args, "words.txt")
+		args = append(args, "static/texts/words.txt")
 	case "medium":
-		args = append(args, "words2.txt")
+		args = append(args, "static/texts/words2.txt")
 	case "hard":
-		args = append(args, "words3.txt")
+		args = append(args, "static/texts/words3.txt")
 		args = append(args, "--hard")
 	}
 	prepareGameForWeb(Game, args)
@@ -55,17 +55,17 @@ func StartNewGame(w *http.ResponseWriter, r *http.Request, gameMode string) {
 		user.GenerateUniqueId()
 		user.SetUpUserCookies(w)
 	}
-	mutex.Lock()
-	sessions[Game.PublicId] = &WebGame{Game, bytes.Buffer{}, false, false, user, gameMode}
-	mutex.Unlock()
+	Mutex.Lock()
+	Sessions[Game.PublicId] = &WebGame{Game, bytes.Buffer{}, false, false, user, gameMode}
+	Mutex.Unlock()
 	http.SetCookie(*w, &http.Cookie{Name: "sessionid", Value: Game.PublicId})
 	defer Game.StartGame()
 }
 
 func getWebGameFromId(id string) *WebGame {
-	mutex.Lock()
-	s := sessions[id]
-	mutex.Unlock()
+	Mutex.Lock()
+	s := Sessions[id]
+	Mutex.Unlock()
 
 	return s
 }
@@ -79,4 +79,5 @@ func prepareGameForWeb(Game *hangmanclassic.HangmanGame, args []string) {
 	Game.ReplaceExecution(overridedExecutionCheckForLetterOccurence, string(hangmanclassic.DefaultExecutionCheckForLetterOccurence))
 	Game.Config.SetConfigItemValue(hangmanclassic.ConfigMultipleWorkers, true)
 	Game.RemoveExecution(hangmanclassic.DefaultExecutionDisplayBody)
+	Game.RemoveExecution(hangmanclassic.DefaultExecutionLookForAutoSave)
 }
