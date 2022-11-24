@@ -1,4 +1,4 @@
-package hangmanweb
+package main
 
 import (
 	"crypto/md5"
@@ -10,10 +10,13 @@ import (
 	"os"
 	"os/signal"
 	"strconv"
-	"sync"
 	"syscall"
 	"time"
 )
+
+func main() {
+	StartServer()
+}
 
 var sessions = map[string](*WebGame){}
 
@@ -22,8 +25,7 @@ func StartServer() {
 	fs := http.FileServer(http.Dir("./web/"))
 	http.Handle("/web/", http.StripPrefix("/web/", fs))
 
-	wg.Add(1)
-	go AutoSaveWorker(&wg)
+	go AutoSaveWorker()
 	go LoadUserCSV()
 
 	sigchnl := make(chan os.Signal, 1)
@@ -52,10 +54,7 @@ func InitWebHandlers() {
 	http.HandleFunc("/scoreboard", ScoreboardHandler)
 }
 
-var wg = sync.WaitGroup{}
-
-func AutoSaveWorker(wg *sync.WaitGroup) {
-	defer wg.Done()
+func AutoSaveWorker() {
 	for {
 		time.Sleep(time.Second * 10)
 		SaveUserCSV()

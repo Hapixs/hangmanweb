@@ -1,10 +1,11 @@
-package hangmanweb
+package main
 
 import (
-	"hangman_classic"
 	"net/http"
 	"strconv"
 	"text/template"
+
+	"github.com/Hapixs/hangmanclassic"
 )
 
 type HtmlData struct {
@@ -18,11 +19,11 @@ type HtmlData struct {
 }
 
 const (
-	templatePathIndex = "web/index.html"
-	templatePathWin   = "web/win.html"
-	templatePathLoose = "web/loose.html"
-	templatePathLogin = "web/login.html"
-	templateStats     = "web/statistics.html"
+	templatePathIndex = "static/templates/index.html"
+	templatePathWin   = "static/templates/win.html"
+	templatePathLoose = "static/templates/loose.html"
+	templatePathLogin = "static/templates/login.html"
+	templateStats     = "static/templates/statistics.html"
 )
 
 func HangmanPostHandler(w http.ResponseWriter, r *http.Request) {
@@ -48,7 +49,7 @@ func LoginPostHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		encodedPass := string(hangman_classic.GetEncodedStringInSha256(r.Form.Get("password")))
+		encodedPass := string(hangmanclassic.GetEncodedStringInSha256(r.Form.Get("password")))
 
 		for _, v := range usermap {
 			if v.Username == r.Form.Get("username") {

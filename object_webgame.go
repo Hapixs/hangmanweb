@@ -1,14 +1,15 @@
-package hangmanweb
+package main
 
 import (
 	"bytes"
-	"hangman_classic"
 	"net/http"
 	"sync"
+
+	"github.com/Hapixs/hangmanclassic"
 )
 
 type WebGame struct {
-	Game     *hangman_classic.HangmanGame
+	Game     *hangmanclassic.HangmanGame
 	Input    bytes.Buffer
 	IsWin    bool
 	IsLoose  bool
@@ -36,7 +37,7 @@ func getGameFromCookies(w http.ResponseWriter, r *http.Request) *WebGame {
 }
 
 func StartNewGame(w *http.ResponseWriter, r *http.Request, gameMode string) {
-	Game := &hangman_classic.HangmanGame{}
+	Game := &hangmanclassic.HangmanGame{}
 	args := []string{}
 	switch gameMode {
 	default:
@@ -69,13 +70,13 @@ func getWebGameFromId(id string) *WebGame {
 	return s
 }
 
-func prepareGameForWeb(Game *hangman_classic.HangmanGame, args []string) {
+func prepareGameForWeb(Game *hangmanclassic.HangmanGame, args []string) {
 	Game.InitGame(args)
-	Game.ReplaceExecution(overridedExecutionWaitForInput, string(hangman_classic.DefaultExecutionWaitForInput))
-	Game.ReplaceExecution(overridedExecutionCheckForRemainingTries, string(hangman_classic.DefaultExecutionCheckForRemainingTries))
-	Game.ReplaceExecution(overridedExecutionCheckForWordDiscover, string(hangman_classic.DefaultExecutionCheckForWordDiscover))
-	Game.ReplaceExecution(overridedExecutionCheckForWord, string(hangman_classic.DefaultExecutionCheckForWord))
-	Game.ReplaceExecution(overridedExecutionCheckForLetterOccurence, string(hangman_classic.DefaultExecutionCheckForLetterOccurence))
-	Game.Config.SetConfigItemValue(hangman_classic.ConfigMultipleWorkers, true)
-	Game.RemoveExecution(hangman_classic.DefaultExecutionDisplayBody)
+	Game.ReplaceExecution(overridedExecutionWaitForInput, string(hangmanclassic.DefaultExecutionWaitForInput))
+	Game.ReplaceExecution(overridedExecutionCheckForRemainingTries, string(hangmanclassic.DefaultExecutionCheckForRemainingTries))
+	Game.ReplaceExecution(overridedExecutionCheckForWordDiscover, string(hangmanclassic.DefaultExecutionCheckForWordDiscover))
+	Game.ReplaceExecution(overridedExecutionCheckForWord, string(hangmanclassic.DefaultExecutionCheckForWord))
+	Game.ReplaceExecution(overridedExecutionCheckForLetterOccurence, string(hangmanclassic.DefaultExecutionCheckForLetterOccurence))
+	Game.Config.SetConfigItemValue(hangmanclassic.ConfigMultipleWorkers, true)
+	Game.RemoveExecution(hangmanclassic.DefaultExecutionDisplayBody)
 }

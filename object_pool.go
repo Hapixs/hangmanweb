@@ -1,4 +1,4 @@
-package hangmanweb
+package main
 
 import (
 	"math/rand"
