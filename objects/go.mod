@@ -1,4 +1,4 @@
-module objects
+module github.com/Hapixs/hangmanweb/objects
 
 go 1.19
 
