@@ -44,7 +44,6 @@ func (c *Gamecache) InitGameCache(game *HangmanGame) {
 	}
 
 	_, _, asciiFileName := game.Config.GetConfigItem(ConfigASCIIFile)
-	println(asciiFileName)
 	asciicontent, asciierr := os.ReadFile(asciiFileName)
 	if asciierr == nil {
 		asciiCharacterContentSplited := strings.Split(string(asciicontent), "\n")
