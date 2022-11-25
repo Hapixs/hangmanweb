@@ -128,10 +128,14 @@ func SaveUserCSV() {
 		}
 	}
 
+	os.Mkdir("data/", os.ModePerm)
+
 	f, err := os.Create("data/users.csv")
 
 	if err != nil {
 		println("Error during file creation for user.csv")
+		println(err.Error())
+		os.Exit(1)
 		return
 	}
 
