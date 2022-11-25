@@ -1,10 +1,9 @@
 package handlers
 
 import (
+	"hangmanclassicobjects"
 	"net/http"
 	"objects"
-
-	"github.com/Hapixs/hangmanclassic"
 )
 
 func LoginPostHandler(w http.ResponseWriter, r *http.Request) {
@@ -17,7 +16,7 @@ func LoginPostHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		encodedPass := string(hangmanclassic.GetEncodedStringInSha256(r.Form.Get("password")))
+		encodedPass := string(hangmanclassicobjects.GetEncodedStringInSha256(r.Form.Get("password")))
 
 		for _, v := range objects.Usermap {
 			if v.Username == r.Form.Get("username") {

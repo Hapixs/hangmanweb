@@ -1,11 +1,11 @@
 package objects
 
-import "github.com/Hapixs/hangmanclassic"
+import "hangmanclassicobjects"
 
-var overridedExecutionWaitForInput = hangmanclassic.GameExecution{Name: string(hangmanclassic.DefaultExecutionWaitForInput), Func: func(userInput *string, game *hangmanclassic.HangmanGame) bool {
+var overridedExecutionWaitForInput = hangmanclassicobjects.GameExecution{Name: string(hangmanclassicobjects.DefaultExecutionWaitForInput), Func: func(userInput *string, game *hangmanclassicobjects.HangmanGame) bool {
 	Game := getWebGameFromId(game.PublicId)
 	for Game.Input.Len() <= 0 {
-		if game.Gamestatus == int(hangmanclassic.ENDED) {
+		if game.Gamestatus == int(hangmanclassicobjects.ENDED) {
 			return true
 		}
 	}
@@ -18,7 +18,7 @@ var overridedExecutionWaitForInput = hangmanclassic.GameExecution{Name: string(h
 	return false
 }}
 
-var overridedExecutionCheckForRemainingTries = hangmanclassic.GameExecution{Name: string(hangmanclassic.DefaultExecutionCheckForRemainingTries), Func: func(userInput *string, game *hangmanclassic.HangmanGame) bool {
+var overridedExecutionCheckForRemainingTries = hangmanclassicobjects.GameExecution{Name: string(hangmanclassicobjects.DefaultExecutionCheckForRemainingTries), Func: func(userInput *string, game *hangmanclassicobjects.HangmanGame) bool {
 	if game == nil {
 		return true
 	}
@@ -33,16 +33,16 @@ var overridedExecutionCheckForRemainingTries = hangmanclassic.GameExecution{Name
 	return false
 }}
 
-var overridedExecutionCheckForWordDiscover = hangmanclassic.GameExecution{Name: string(hangmanclassic.DefaultExecutionCheckForWordDiscover), Func: func(userInput *string, game *hangmanclassic.HangmanGame) bool {
+var overridedExecutionCheckForWordDiscover = hangmanclassicobjects.GameExecution{Name: string(hangmanclassicobjects.DefaultExecutionCheckForWordDiscover), Func: func(userInput *string, game *hangmanclassicobjects.HangmanGame) bool {
 	Game := getWebGameFromId(game.PublicId)
-	if !hangmanclassic.HasOccurenceLetter(game.GetGameWord(), '_') {
+	if !hangmanclassicobjects.HasOccurenceLetter(game.GetGameWord(), '_') {
 		Game.IsWin = true
 		return true
 	}
 	return false
 }}
 
-var overridedExecutionCheckForWord = hangmanclassic.GameExecution{Name: string(hangmanclassic.DefaultExecutionCheckForWord), Func: func(userInput *string, game *hangmanclassic.HangmanGame) bool {
+var overridedExecutionCheckForWord = hangmanclassicobjects.GameExecution{Name: string(hangmanclassicobjects.DefaultExecutionCheckForWord), Func: func(userInput *string, game *hangmanclassicobjects.HangmanGame) bool {
 	Game := getWebGameFromId(game.PublicId)
 	if len(*userInput) > 1 {
 		if game.GetGameToFind() == *userInput {
@@ -51,22 +51,22 @@ var overridedExecutionCheckForWord = hangmanclassic.GameExecution{Name: string(h
 		}
 		game.AddGameTry()
 		game.AddGameTry()
-		hangmanclassic.AddInformationHeadMessage("This is not the correct word !")
+		hangmanclassicobjects.AddInformationHeadMessage("This is not the correct word !")
 		return true
 	}
 
 	return false
 }}
 
-var overridedExecutionCheckForLetterOccurence = hangmanclassic.GameExecution{Name: string(hangmanclassic.DefaultExecutionCheckForLetterOccurence), Func: func(userInput *string, game *hangmanclassic.HangmanGame) bool {
+var overridedExecutionCheckForLetterOccurence = hangmanclassicobjects.GameExecution{Name: string(hangmanclassicobjects.DefaultExecutionCheckForLetterOccurence), Func: func(userInput *string, game *hangmanclassicobjects.HangmanGame) bool {
 	Game := getWebGameFromId(game.PublicId)
 	rn := []rune(*userInput)[0]
-	if !hangmanclassic.HasOccurenceLetter(game.GetGameToFind(), rune(rn)) {
+	if !hangmanclassicobjects.HasOccurenceLetter(game.GetGameToFind(), rune(rn)) {
 		game.AddGameTry()
-		hangmanclassic.AddInformationHeadMessage(string(rn) + " is not in this word..")
+		hangmanclassicobjects.AddInformationHeadMessage(string(rn) + " is not in this word..")
 	} else {
 		game.SetGameWord(game.UpdateGameWord(game.GetGameToFind(), game.GetGameWord(), rn))
-		Game.User.LetterFind += len(hangmanclassic.GetOccurenceLetter(game.GetGameToFind(), rn))
+		Game.User.LetterFind += len(hangmanclassicobjects.GetOccurenceLetter(game.GetGameToFind(), rn))
 	}
 	return false
 }}

@@ -2,6 +2,7 @@ go 1.19
 
 use (
 	./handlers
+	./hangman-classic/objects
 	./objects
 	./utils
 )
