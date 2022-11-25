@@ -5,7 +5,7 @@ import (
 	"objects"
 )
 
-func RestartSoloGameHandler(w http.ResponseWriter, r *http.Request) {
+func restartSoloGameHandler(w http.ResponseWriter, r *http.Request) {
 	if !objects.IsLogin(r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return

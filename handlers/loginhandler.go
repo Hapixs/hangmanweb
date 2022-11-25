@@ -6,7 +6,7 @@ import (
 	"objects"
 )
 
-func LoginPostHandler(w http.ResponseWriter, r *http.Request) {
+func loginPostHandler(w http.ResponseWriter, r *http.Request) {
 	if !objects.IsLogin(r) {
 		switch r.Method {
 		case "POST":

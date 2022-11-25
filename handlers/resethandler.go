@@ -5,7 +5,7 @@ import (
 	"objects"
 )
 
-func ResetHandler(w http.ResponseWriter, r *http.Request) {
+func resetHandler(w http.ResponseWriter, r *http.Request) {
 	Game := objects.GetGameFromCookies(w, r)
 	Game.Game.Kill()
 	objects.Mutex.Lock()

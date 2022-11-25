@@ -7,7 +7,7 @@ import (
 	"text/template"
 )
 
-func ScoreboardHandler(w http.ResponseWriter, r *http.Request) {
+func scoreboardHandler(w http.ResponseWriter, r *http.Request) {
 	sbt := objects.ScoreboardType_Letter
 
 	if r.Method == "POST" {

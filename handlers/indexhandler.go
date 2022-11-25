@@ -6,7 +6,7 @@ import (
 	"text/template"
 )
 
-func IndexHandler(w http.ResponseWriter, r *http.Request) {
+func indexHandler(w http.ResponseWriter, r *http.Request) {
 	var data HtmlData
 	var tp *template.Template
 	if !objects.IsLogin(r) {

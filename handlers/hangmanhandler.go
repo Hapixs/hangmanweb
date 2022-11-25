@@ -5,7 +5,7 @@ import (
 	"objects"
 )
 
-func HangmanPostHandler(w http.ResponseWriter, r *http.Request) {
+func hangmanPostHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 		if err := r.ParseForm(); err != nil {

@@ -4,5 +4,4 @@ use (
 	./handlers
 	./hangman-classic/objects
 	./objects
-	./utils
 )
