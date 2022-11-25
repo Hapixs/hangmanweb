@@ -61,6 +61,8 @@ func LoadUserCSV() {
 
 	if err != nil {
 		println("No users.csv found.")
+		SaveUserCSV()
+		LoadUserCSV()
 		return
 	}
 
