@@ -1,6 +1,8 @@
 body {
     display: inline;
-    background-color: #c88b5f;
+    background-image:url(/static/assets/background.jpg) ;
+    background-attachment: fixed;
+    background-position: center;
 }
 
 h1 {
@@ -8,14 +10,17 @@ h1 {
     justify-content: center;
     align-items: center;
     font-size: 60px;
-    font-family: "Kimberley", monospace
+    font-family: "Kimberley", monospace;
+    color: white;
+    text-shadow: 0 0 60px rgba(202,228,225,0.8);
 }
 
 .word {
     display: flex;
     justify-content: center;
     font-size: 60px;
-    font-family: "Kimberley", monospace
+    font-family: "Kimberley", monospace;
+    color: white;
 }
 
 .barre {
@@ -26,14 +31,17 @@ h1 {
 }
 
 .gauche {
-    background-color: blue;
+    opacity: 5;
     font-size: 25px;
     border-radius: 5rem;
+    color: white;
+    background-color : rgba(0, 0, 0,0.5);
 }
 
 .droite {
-    background-color: red;
+    background-color : rgba(0, 0, 0,0.5);
     border-radius: 5rem;
+    color: white;
 }
 
 .pendu {
@@ -41,6 +49,7 @@ h1 {
     justify-content: center;
     font-family: "Kimberley", monospace;
     margin-top: 100px;
+    color: white;
 }
 
 .gauche,
@@ -62,12 +71,14 @@ h1 {
     display: flex;
     justify-content: center;
     font-family: "Kimberley", monospace;
+    color: white;
 }
 
 .letterused {
     display: flex;
     justify-content: center;
     font-family: "Kimberley", monospace;
+    color: white;
 }
 
 @font-face {
@@ -112,16 +123,20 @@ h1 {
     display: inline-block;
     max-width: 50vw;
     border-radius: 5rem;
+    color: white;
 }
 
 .login {
-    background-color: white;
+    background-color : rgba(0, 0, 0,0.5);
     font-size: 25px;
     border-radius: 5rem;
+    color: white;
 }
 
 .nolog {
-    background-color: blue;
+    background-color : rgba(0, 0, 0,0.5);
+    color: white;
+    text-shadow: 0 0 60px rgba(202,228,225,0.8);
 }
 
 .compte {
@@ -129,6 +144,7 @@ h1 {
     justify-content: center;
     font-family: "Kimberley", monospace;
     margin-top: 20px;
+    color: white;
 }
 
 #name {
@@ -142,7 +158,7 @@ h1 {
     font-family: "Kimberley", monospace;
     font-size: 20px;
     margin-top: 20px;
-    margin-bottom: 20px
+    margin-bottom: 20px;
 }
 
 #submit {
@@ -168,6 +184,7 @@ h1 {
     font-family: "Kimberley", monospace;
     margin-top: 20px;
     font-size: 25px;
+    color: white;
 }
 
 #randomeuser {
@@ -191,6 +208,7 @@ h1 {
     display: flex;
     justify-content: center;
     font-family: "Kimberley", monospace;
+    color: white;
 }
 
 .wordresult {
@@ -199,6 +217,7 @@ h1 {
     font-size: 40px;
     font-family: "Kimberley", monospace;
     margin-bottom: 20px;
+    color: white;
 }
 
 #restartgame {
@@ -248,6 +267,8 @@ h1 {
 }
 
 #formlogoutstat {
+    width: 120px;
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -256,7 +277,7 @@ h1 {
 
 #logoutstatistics {
     border-radius: 5rem;
-    width: 80px;
+    width: 120px;
     height: 30px;
     font-family: "Kimberley", monospace;
     margin-top: 10px;
@@ -289,7 +310,13 @@ header {
     display: flex;
     justify-content: center;
     font-family: "Kimberley", monospace;
-    font-size: 20px;
+    font-size: 25px;
+    color: white;
+    background-color : rgba(0, 0, 0,0.5);
+    margin-left: 30%;
+    margin-right: 30%;
+    padding: 3%;
+    border-radius: 5rem;
 }
 
 #formscore {
@@ -313,7 +340,7 @@ header {
     height: 30px;
     font-family: "Kimberley", monospace;
     margin-top: 15px;
-    margin-left: 10px;
+    margin-left: 30px;
 }
 
 .typescore {
@@ -322,6 +349,9 @@ header {
     font-family: "Kimberley", monospace;
     margin-top: 30px;
     font-size: 50px;
+    text-shadow: 0 0 60px rgba(202,228,225,0.8);
+    color: white;
+    border-radius: 5rem;
 }
 
 .affichescore {
@@ -329,5 +359,11 @@ header {
     justify-content: center;
     font-family: "Kimberley", monospace;
     margin-top: 40px;
+    margin-left: 20%;
+    margin-right: 20%;
     font-size: 20px;
+    border-radius: 5rem;
+    padding-bottom: 3%;
+    color: white;
+    background-color : rgba(0, 0, 0,0.5);
 }

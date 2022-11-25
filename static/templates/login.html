@@ -9,29 +9,29 @@
 
 <header>
     <form id="formlogoutstat" action="/scoreboard" method="get">
-        <input id="logoutstatistics" type="submit" value="scoreboard" />
+        <input id="logoutstatistics" type="submit" value="Scoreboard" />
     </form>
 </header>
 
 <body>
-    <h1> Login </h1>
+    <h1>Connexion</h1>
     <div class="container">
         <div class="login">
-            <div class="compte">connecte toi !</div>
+            <div class="compte">Connecte toi !</div>
             <div class="barre">
                 <form id="formuser" action="/login" method="post">
-                    <label id="name" for="username">username</label>
+                    <label id="name" for="username">Nom d'utilisateur :</label>
                     <input id="username" name="username" type="text" autofocus="autofocus" autocomplete="off">
-                    <label id="psw" for="password">password</label>
+                    <label id="psw" for="password">Mot de passe :</label>
                     <input id="password" name="password" type="password" autofocus="autofocus" autocomplete="off">
                     <input id="submit" type="submit" value="Connexion" />
                 </form>
             </div>
         </div>
         <div class="nolog">
-            <div class="invite">jouer en tant qu'inviter</div>
+            <div class="invite">Jouer en tant qu'invité</div>
             <form id="randomeuser" action="/nolog" method="get">
-                <input id="withoutnamesubmit" type="submit" value="play" />
+                <input id="withoutnamesubmit" type="submit" value="Jouer" />
             </form>
         </div>
     </div>

@@ -37,21 +37,21 @@
         </form>
       </div>
       <div class="tries">
-        <p> Nombres d'erreurs {{ .GetGameTries }} /10:</p>
+        <p> Nombre d'erreurs : {{ .GetGameTries }} /10:</p>
       </div>
       <div class="letterused">
-        <p>Letters already used: {{ .GetGameUsed }}</p>
+        <p>Lettres utilisées : {{ .GetGameUsed }}</p>
       </div>
       {{ end }}
 
       {{ if eq .IsInGame false}}
       <div>
-        <div class="choosediff">choisi ta difficulter</div>
+        <div class="choosediff">Choisis ta difficulté</div>
         <form id="formdifficulty" action="/startsologame" method="post">
           <select id="difficulty" name="difficulty">
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
+            <option value="easy">Facile</option>
+            <option value="medium">Normal</option>
+            <option value="hard">Difficile</option>
           </select>
           <br>
           <input id="start" type="submit" value="Play" class="button">

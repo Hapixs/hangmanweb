@@ -10,10 +10,10 @@
 
 <header>
     <form id="formlogoutstat" action="/logout" method="get">
-        <input id="logoutstatistics" type="submit" value="Back" />
+        <input id="logoutstatistics" type="submit" value="Retour" />
     </form>
     <form id="formmainpage" action="/" method="get">
-        <input id="mainpage" type="submit" value="main page" />
+        <input id="mainpage" type="submit" value="Accueil" />
     </form>
     <form id="formlogoutstat" action="/scoreboard" method="get">
         <input id="logoutstatistics" type="submit" value="Scoreboard" />
@@ -22,23 +22,23 @@
 
 
 <body>
-    <h1>statistics</h1>
+    <h1>Statistiques</h1>
     <div class="statistics">
-        Logged as: {{ .Username }}
+        Connecté en tant que {{ .Username }}
         <br><br>
-        Game played {{ .Played }}
+        Parties joueés : {{ .Played }} parties
         <br><br>
-        Win amount {{ .Wins }}
+        Nombre de victoires : {{ .Wins }} parties
         <br><br>
-        Loose amount {{ .Loose }}
+        Nombre défaites : {{ .Loose }} parties
         <br><br>
-        Letter found {{ .Letters }}
+        Nombre de lettres trouvées : {{ .Letters }} lettres
         <br><br>
-        Words found {{ .Words }}
+        Nombre de mots trouvés : {{ .Words }} mots
         <br><br>
-        Win ratio {{ .WinRatio}}
+        Ratio de victoires : {{ .WinRatio}} victoires
         <br><br>
-        Loose ratio {{ .LooseRatio }}
+        Ratio de défaites : {{ .LooseRatio }} défaites
     </div>
 </body>
 

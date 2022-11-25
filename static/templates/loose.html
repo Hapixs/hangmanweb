@@ -10,13 +10,13 @@
 
 <header>
   <form id="formlogoutstat" action="/logout" method="get">
-    <input id="logoutstatistics" type="submit" value="logout" />
+    <input id="logoutstatistics" type="submit" value="Se déconnecter" />
   </form>
   <form id="formlogoutstat" action="/statistics" method="get">
-    <input id="logoutstatistics" type="submit" value="statistics" />
+    <input id="logoutstatistics" type="submit" value="Statistiques" />
   </form>
   <form id="formlogoutstat" action="/scoreboard" method="get">
-    <input id="logoutstatistics" type="submit" value="scoreboard" />
+    <input id="logoutstatistics" type="submit" value="Scoreboard" />
   </form>
 </header>
 
@@ -25,11 +25,11 @@
   <div class="wordresult"> the word was {{ .GetGameToFind }} !</div>
   <div class="memewinlose"><img src="https://thumbs.gfycat.com/BlankSorrowfulGermanspaniel-max-1mb.gif"></div>
   <form id="restartgame" action="/restartsologame" method="post">
-    <input id="restartbouton" type="submit" value="restart" />
+    <input id="restartbouton" type="submit" value="Rejouer" />
     <select name="difficulty" id="difficulty">
-      <option value="easy" {{ if eq .GameMode "easy" }} selected {{ end }}>Easy</option>
-      <option value="medium" {{ if eq .GameMode "medium" }} selected {{ end }}>Medium</option>
-      <option value="hard" {{ if eq .GameMode "hard" }} selected {{ end }}>Hard</option>
+      <option value="easy" {{ if eq .GameMode "easy" }} selected {{ end }}>Facile</option>
+      <option value="medium" {{ if eq .GameMode "medium" }} selected {{ end }}>Normal</option>
+      <option value="hard" {{ if eq .GameMode "hard" }} selected {{ end }}>Difficile</option>
     </select>
   </form>
 </body>
