@@ -109,7 +109,6 @@ func SaveUserCSV() {
 	if hash == lastUsermapHash {
 		return
 	}
-
 	records := [][]string{
 		{"username", "points", "uniqueid", "password", "wins", "loose", "played", "lettersfind", "wordsfind"},
 	}
@@ -132,7 +131,7 @@ func SaveUserCSV() {
 	f, err := os.Create("data/users.csv")
 
 	if err != nil {
-		log.Fatalln("failed to open file", err)
+		println("Error during file creation for user.csv")
 		return
 	}
 
@@ -142,7 +141,6 @@ func SaveUserCSV() {
 		log.Fatalln("error writing record to file", err)
 		return
 	}
-
 	f.Close()
 	w.Flush()
 	println("Saved " + strconv.Itoa(len(records)-1) + " users")
