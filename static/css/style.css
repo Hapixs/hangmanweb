@@ -1,6 +1,6 @@
 body {
     display: inline;
-    background-color: #3b6589;
+    background-color: #c88b5f;
 }
 
 h1 {
@@ -28,10 +28,12 @@ h1 {
 .gauche {
     background-color: blue;
     font-size: 25px;
+    border-radius: 5rem;
 }
 
 .droite {
     background-color: red;
+    border-radius: 5rem;
 }
 
 .pendu {
@@ -51,7 +53,7 @@ h1 {
 
 .container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .tries {
@@ -107,11 +109,13 @@ h1 {
     width: 49%;
     display: inline-block;
     max-width: 50vw;
+    border-radius: 5rem;
 }
 
 .login {
     background-color: white;
     font-size: 25px;
+    border-radius: 5rem;
 }
 
 .nolog {
