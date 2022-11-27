@@ -17,9 +17,19 @@ func scoreboardHandler(w http.ResponseWriter, r *http.Request) {
 	tp := template.Must(template.ParseFiles(templateScoreboard))
 
 	sb := objects.BuildScoreboard(sbt)
-	sbd := ScoreboardHtmlData{}
+	sbd := HtmlData{}
+	InitHtmlDataFragments(&sbd)
+
 	sbd.SB_NAME = sb.Name
 	sbd.SB_TYPE = sbt
+
+	if objects.IsLogin(r) {
+		sbd.IsLogin = true
+		user, err := objects.GetUserFromRequest(r)
+		if err == nil {
+			sbd.SB_USER_PLACE = user.GetScoreboardPlace(sb) + 1
+		}
+	}
 
 	for i, v := range sb.Top {
 		switch sbt {

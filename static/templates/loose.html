@@ -12,6 +12,7 @@
   <form id="formlogoutstat" action="/logout" method="get">
     <input id="logoutstatistics" type="submit" value="Se déconnecter" />
   </form>
+  </foaccess not allowed source:access not allowed source:rm>
   <form id="formlogoutstat" action="/statistics" method="get">
     <input id="logoutstatistics" type="submit" value="Statistiques" />
   </form>
@@ -25,12 +26,26 @@
   <div class="wordresult"> the word was {{ .GetGameToFind }} !</div>
   <div class="memewinlose"><img src="https://thumbs.gfycat.com/BlankSorrowfulGermanspaniel-max-1mb.gif"></div>
   <form id="restartgame" action="/restartsologame" method="post">
-    <input id="restartbouton" type="submit" value="Rejouer" />
-    <select name="difficulty" id="difficulty">
-      <option value="easy" {{ if eq .GameMode "easy" }} selected {{ end }}>Facile</option>
-      <option value="medium" {{ if eq .GameMode "medium" }} selected {{ end }}>Normal</option>
-      <option value="hard" {{ if eq .GameMode "hard" }} selected {{ end }}>Difficile</option>
-    </select>
+    
+      {{ .RestartButtonFragment }}
+      <div class="difficultyselection">
+        <div>
+          <input type="radio" id="difficulty" name="difficulty" value="easy"
+          {{ if eq .GameMode "easy" }} checked {{end}}>
+          <label for="difficulty">FACILE</label>
+        </div>
+        <div>
+          <input type="radio" id="difficulty" name="difficulty" value="medium"
+          {{ if eq .GameMode "medium" }} checked {{end}}>
+          <label for="difficulty">MOYEN</label>
+        </div>
+        <div>
+          <input type="radio" id="difficulty" name="difficulty" value="hard"
+          {{ if eq .GameMode "hard" }} checked {{end}}>
+          <label for="difficulty">DIFFICILE</label>
+        </div>
+    </div>
+
   </form>
 </body>
 

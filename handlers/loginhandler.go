@@ -34,5 +34,5 @@ func loginPostHandler(w http.ResponseWriter, r *http.Request) {
 		user.GenerateUniqueId()
 		user.SetUpUserCookies(&w)
 	}
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/?notif=Connexion%20%réussite!", http.StatusSeeOther)
 }

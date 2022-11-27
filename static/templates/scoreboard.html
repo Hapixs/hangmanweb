@@ -8,35 +8,43 @@
   <link rel="stylesheet" href="static/css/style.css">
 </head>
 <header>
-  <form id="formlogoutstat" action="/logout" method="get">
-    <input id="logoutstatistics" type="submit" value="Retour" />
-  </form>
-  <form id="formlogoutstat" action="/statistics" method="get">
-    <input id="logoutstatistics" type="submit" value="Statistiques" />
-  </form>
-  <form id="formlogoutstat" action="/scoreboard" method="get">
-    <input id="logoutstatistics" type="submit" value="Scoreboard" />
-  </form>
+  {{ .NavigatorFragment }}
 </header>
 
 <body>
-  <div>
-    <form id="formscore" action="/scoreboard" method="post">
-      <select id="scoreboard" name="sb_type" id="sb_type">
-        <option value="sb_letter" {{ if eq .SB_TYPE "sb_letter" }} selected {{end}}>Top letter finder</option>
-        <option value="sb_words" {{ if eq .SB_TYPE "sb_words" }} selected {{end}}>Top words finder</option>
-        <option value="sb_loose" {{ if eq .SB_TYPE "sb_loose" }} selected {{end}}>Top loose</option>
-        <option value="sb_win" {{ if eq .SB_TYPE "sb_win" }} selected {{end}}>Top win</option>
-        <option value="sb_points" {{ if eq .SB_TYPE "sb_points" }} selected {{end}}>Top point</option>
-      </select>
-      <input id="changescoreboard" type="submit" value="Changer" class="button">
-    </form>
-  </div>
-
-  <div class="typescore"> {{ .SB_NAME }} </div>
-  <div class="affichescore"> {{ range .SB_USERS }}<br>
-    {{ . }}
-    {{ end }}
+  <div class="container">
+     <div class="gauche">
+          <form class="scoreboardbutton" action="/scoreboard" method="post">
+            <input  name="sb_type" id="sb_type" type="text" value ="sb_letter" hidden/>
+            <button class="btn effect04" data-sm-link-text="CLICK" target="_blank"><span>TOP LETTRES</span></button>
+          </form>
+          <form class="scoreboardbutton" action="/scoreboard" method="post">
+            <input  name="sb_type" id="sb_type" type="text" value ="sb_words" hidden/>
+            <button class="btn effect04" data-sm-link-text="CLICK" target="_blank"><span>TOP MOTS</span></button>
+          </form>
+          <form class="scoreboardbutton" action="/scoreboard" method="post">
+            <input  name="sb_type" id="sb_type" type="text" value ="sb_loose" hidden/>
+            <button class="btn effect04" data-sm-link-text="CLICK" target="_blank"><span>TOP PERTES</span></button>
+          </form>
+          <form class="scoreboardbutton" action="/scoreboard" method="post">
+            <input  name="sb_type" id="sb_type" type="text" value ="sb_win" hidden/>
+            <button class="btn effect04" data-sm-link-text="CLICK" target="_blank"><span>TOP GAGNER</span></button>
+          </form>
+          <form class="scoreboardbutton" action="/scoreboard" method="post">
+            <input  name="sb_type" id="sb_type" type="text" value ="sb_points" hidden/>
+            <button class="btn effect04" data-sm-link-text="CLICK" target="_blank"><span>TOP POINTS</span></button>
+          </form>
+    </div>
+    <div class="droite">
+      <div class="typescore"> 
+        <h1> {{ .SB_NAME }} </h1> 
+      </div>
+      <div class="affichescore"> {{ range .SB_USERS }}<br>
+      {{ . }}
+      {{ end }}
+    </div>
+    {{ if eq .IsLogin true }} <p> Tu est placer: # {{ .SB_USER_PLACE }}  </p> {{end}}
+    </div>
   </div>
 </body>
 

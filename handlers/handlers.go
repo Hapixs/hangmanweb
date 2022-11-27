@@ -1,6 +1,9 @@
 package handlers
 
-import "net/http"
+import (
+	"net/http"
+	"os"
+)
 
 const (
 	templatePathIndex  = "static/templates/index.html"
@@ -9,6 +12,9 @@ const (
 	templatePathLogin  = "static/templates/login.html"
 	templateStats      = "static/templates/statistics.html"
 	templateScoreboard = "static/templates/scoreboard.html"
+
+	restartButtonFragment = "restart_button"
+	navigatorFragment     = "navigator"
 )
 
 type HtmlData struct {
@@ -16,26 +22,29 @@ type HtmlData struct {
 	GetGameUsed   string
 	GetGameWord   string
 	GetGameToFind string
-	GetUserName   string
 	IsInGame      bool
 	GameMode      string
-}
 
-type StatsHtmlData struct {
-	Username   string
-	Played     int
-	Wins       int
-	Loose      int
-	Letters    int
-	Words      int
-	WinRatio   float32
-	LooseRatio float32
-}
+	IsLogin     bool
+	GetUserName string
+	Played      int
+	Wins        int
+	Loose       int
+	Letters     int
+	Words       int
+	WinRatio    float32
+	LooseRatio  float32
 
-type ScoreboardHtmlData struct {
-	SB_NAME  string
-	SB_TYPE  string
-	SB_USERS []string
+	NotifMessage string
+
+	DifficultySelectorFragment string
+	RestartButtonFragment      string
+	NavigatorFragment          string
+
+	SB_NAME       string
+	SB_TYPE       string
+	SB_USERS      []string
+	SB_USER_PLACE int
 }
 
 func InitWebServer() {
@@ -52,4 +61,20 @@ func InitWebServer() {
 	http.HandleFunc("/restartsologame", restartSoloGameHandler)
 	http.HandleFunc("/statistics", statisticsHandler)
 	http.HandleFunc("/scoreboard", scoreboardHandler)
+}
+
+func loadHtmlFragment(uri string) string {
+	uri = "static/templates/fragments/" + uri + ".html"
+	c, err := os.ReadFile(uri)
+
+	if err != nil {
+		println("Error when reading " + uri)
+		return ""
+	}
+	return string(c)
+}
+
+func InitHtmlDataFragments(data *HtmlData) {
+	data.RestartButtonFragment = loadHtmlFragment(restartButtonFragment)
+	data.NavigatorFragment = loadHtmlFragment(navigatorFragment)
 }

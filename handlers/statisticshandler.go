@@ -15,16 +15,18 @@ func statisticsHandler(w http.ResponseWriter, r *http.Request) {
 	user, _ := objects.GetUserFromRequest(r)
 	tp := template.Must(template.ParseFiles(templateStats))
 
-	data := StatsHtmlData{
-		Username:   user.Username,
-		Played:     user.Played,
-		Wins:       user.Wins,
-		Loose:      user.Loose,
-		Letters:    user.LetterFind,
-		Words:      user.WordsFind,
-		WinRatio:   user.GetWinRatio(),
-		LooseRatio: user.GetLooseRatio(),
-	}
+	data := HtmlData{}
+
+	InitHtmlDataFragments(&data)
+
+	data.GetUserName = user.Username
+	data.Played = user.Played
+	data.Wins = user.Wins
+	data.Loose = user.Loose
+	data.Letters = user.LetterFind
+	data.Words = user.WordsFind
+	data.WinRatio = user.GetWinRatio()
+	data.LooseRatio = user.GetLooseRatio()
 
 	tp.Execute(w, data)
 }

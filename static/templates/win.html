@@ -8,15 +8,7 @@
   <link rel="stylesheet" href="static/css/style.css">
 </head>
 <header>
-  <form id="formlogoutstat" action="/logout" method="get">
-    <input id="logoutstatistics" type="submit" value="logout" />
-  </form>
-  <form id="formlogoutstat" action="/statistics" method="get">
-    <input id="logoutstatistics" type="submit" value="statistics" />
-  </form>
-  <form id="formlogoutstat" action="/scoreboard" method="get">
-    <input id="logoutstatistics" type="submit" value="scoreboard" />
-  </form>
+  {{ .NavigatorFragment }}
 </header>
 
 <body>
@@ -24,12 +16,24 @@
   <div class="wordresult"> the word was {{ .GetGameToFind }} !</div>
   <div class="memewinlose"><img src="https://acegif.com/wp-content/uploads/funny-celebrate-8.gif"></div>
   <form id="restartgame" action="/restartsologame" method="post">
-    <input id="restartbouton" type="submit" value="restart" />
-    <select name="difficulty" id="difficulty">
-      <option value="easy" {{ if eq .GameMode "easy" }} selected {{ end }}>Easy</option>
-      <option value="medium" {{ if eq .GameMode "medium" }} selected {{ end }}>Medium</option>
-      <option value="hard" {{ if eq .GameMode "hard" }} selected {{ end }}>Hard</option>
-    </select>
+      {{ .RestartButtonFragment }}
+      <div class="difficultyselection">
+        <div>
+          <input type="radio" id="difficulty" name="difficulty" value="easy"
+          {{ if eq .GameMode "easy" }} checked {{end}}>
+          <label for="difficulty">FACILE</label>
+        </div>
+        <div>
+          <input type="radio" id="difficulty" name="difficulty" value="medium"
+          {{ if eq .GameMode "medium" }} checked {{end}}>
+          <label for="difficulty">MOYEN</label>
+        </div>
+        <div>
+          <input type="radio" id="difficulty" name="difficulty" value="hard"
+          {{ if eq .GameMode "hard" }} checked {{end}}>
+          <label for="difficulty">DIFFICILE</label>
+        </div>
+    </div>
   </form>
 </body>
 

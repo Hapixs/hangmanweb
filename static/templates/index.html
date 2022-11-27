@@ -10,21 +10,14 @@
 
 
 <header>
-  <form id="formlogoutstat" action="/logout" method="get">
-    <input id="logoutstatistics" type="submit" value="logout" />
-  </form>
-  <form id="formlogoutstat" action="/statistics" method="get">
-    <input id="logoutstatistics" type="submit" value="statistics" />
-  </form>
-  <form id="formlogoutstat" action="/scoreboard" method="get">
-    <input id="logoutstatistics" type="submit" value="scoreboard" />
-  </form>
+  {{ .NavigatorFragment}}
+  <div class="infomessage">
+    <p> {{.NotifMessage }}</p>
+  </div>
 </header>
 
 <body>
   <h1>The Hangman</h1>
-
-  <!-- once game is finished(if the number of tries is 0): {{ .GetGameToFind }} -->
   <div class="container">
     <div class="gauche">
       {{if eq .IsInGame true}}
@@ -42,6 +35,26 @@
       <div class="letterused">
         <p>Lettres utilisées : {{ .GetGameUsed }}</p>
       </div>
+      <form id="restartgame" action="/restartsologame" method="post">
+        {{ .RestartButtonFragment }}
+        <div class="difficultyselection">
+          <div>
+            <input type="radio" id="difficulty" name="difficulty" value="easy"
+            {{ if eq .GameMode "easy" }} checked {{end}}>
+            <label for="difficulty">FACILE</label>
+          </div>
+          <div>
+            <input type="radio" id="difficulty" name="difficulty" value="medium"
+            {{ if eq .GameMode "medium" }} checked {{end}}>
+            <label for="difficulty">MOYEN</label>
+          </div>
+          <div>
+            <input type="radio" id="difficulty" name="difficulty" value="hard"
+            {{ if eq .GameMode "hard" }} checked {{end}}>
+            <label for="difficulty">DIFFICILE</label>
+          </div>
+        </div>
+      </form>
       {{ end }}
 
       {{ if eq .IsInGame false}}

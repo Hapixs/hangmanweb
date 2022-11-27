@@ -42,7 +42,7 @@ func (u *User) SetUpUserCookies(w *http.ResponseWriter) {
 	Mutex.Unlock()
 }
 
-func (u *User) GetScoreboardPlace(sb Scoreboard) int {
+func (u *User) GetScoreboardPlace(sb *Scoreboard) int {
 	for i, v := range sb.Top {
 		if v.UniqueId == u.UniqueId {
 			return i

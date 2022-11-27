@@ -9,15 +9,7 @@
 </head>
 
 <header>
-    <form id="formlogoutstat" action="/logout" method="get">
-        <input id="logoutstatistics" type="submit" value="Retour" />
-    </form>
-    <form id="formmainpage" action="/" method="get">
-        <input id="mainpage" type="submit" value="Accueil" />
-    </form>
-    <form id="formlogoutstat" action="/scoreboard" method="get">
-        <input id="logoutstatistics" type="submit" value="Scoreboard" />
-    </form>
+    {{ .NavigatorFragment }}
 </header>
 
 
